@@ -21,7 +21,7 @@ function smarty_block_textarea($params, $content, &$smarty)
 {
 	global $gBitSystem;
 
-	if ($content) {
+	if (isset($content)) {
 		if ($gBitSystem->isPackageActive('fckeditor')) {
 			$out = smarty_block_fckeditor($params,$content,$smarty);
 		}

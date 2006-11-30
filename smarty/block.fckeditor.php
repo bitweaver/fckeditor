@@ -31,7 +31,7 @@
    */
 function smarty_block_fckeditor($params, $content, &$smarty)
 {
-	if ($content) {
+	if (isset($content)) {
 		if(!isset($params['name']) || empty($params['name']))
 		{
 			$smarty->trigger_error('fckeditor: required parameter "name" missing');
@@ -61,16 +61,20 @@ function smarty_block_fckeditor($params, $content, &$smarty)
 		/* Text Area Compatibility */
 		if(isset($params['width'])) $base_arguments['Width'] = $params['width'];
 		if(isset($params['height'])) $base_arguments['Height'] = $params['height'];
+		else $base_arguments['Height'] = 300;
 
 		/* TODO: Allow setting of these in the admin page */
 		if(isset($params['ToolbarSet'])) $base_arguments['ToolbarSet'] = $params['ToolbarSet'];
+		else
+			$base_arguments['ToolbarSet'] = 'Bitweaver';
+
 		if(isset($params['CheckBrowser'])) $base_arguments['CheckBrowser'] = $params['CheckBrowser'];
 		if(isset($params['DisplayErrors'])) $base_arguments['DisplayErrors'] = $params['DisplayErrors'];
-		
+
 		// Use all other parameters for the config array (replace if needed)
 		$other_arguments = array_diff_assoc($params, $base_arguments);
 		$config_arguments = array_merge($config_arguments, $other_arguments);
-		
+		unset($config_arguments['name']);
 		$out = '';
 		
 		if($init)

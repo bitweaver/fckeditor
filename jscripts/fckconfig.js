@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2006 Frederico Caldeira Knabben
  * 
@@ -84,6 +84,22 @@ FCKConfig.TemplateReplaceAll = true ;
 FCKConfig.TemplateReplaceCheckbox = true ;
 
 FCKConfig.ToolbarLocation = 'In' ;
+
+FCKConfig.ToolbarSets["Bitweaver"] = [
+	['Source','-','Preview'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	'/',
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Unlink','Anchor'],
+	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	'/',
+	['Style','FontFormat','FontName','FontSize'],
+	['TextColor','BGColor'],
+	['FitWindow','-','About']
+];
 
 FCKConfig.ToolbarSets["Default"] = [
 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
