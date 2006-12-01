@@ -85,7 +85,7 @@ FCKConfig.TemplateReplaceCheckbox = true ;
 
 FCKConfig.ToolbarLocation = 'In' ;
 
-FCKConfig.ToolbarSets["Bitweaver"] = [
+FCKConfig.ToolbarSets["Supported"] = [
 	['Source','-','Preview'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
@@ -101,7 +101,45 @@ FCKConfig.ToolbarSets["Bitweaver"] = [
 	['FitWindow','-','About']
 ];
 
-FCKConfig.ToolbarSets["Default"] = [
+FCKConfig.ToolbarSets["Beginner"] = [
+	['Bold','Italic','Underline'],
+	['OrderedList','UnorderedList'],
+	['Link','Unlink','Anchor'],
+	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	['FitWindow','-','About']
+];
+
+FCKConfig.ToolbarSets["Intermediate"] = [
+	['Cut','Copy','Paste','PasteText','PasteWord'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll'],
+	'/',
+	['Bold','Italic','Underline'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Unlink','Anchor'],
+	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	'/',
+	['TextColor','BGColor'],
+	['FitWindow','-','About']
+];
+
+FCKConfig.ToolbarSets["Advanced"] = [
+	['Source','-','Preview'],
+	['Cut','Copy','Paste','PasteText','PasteWord'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+	'/',
+	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+	['OrderedList','UnorderedList','-','Outdent','Indent'],
+	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	['Link','Unlink','Anchor'],
+	['Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	'/',
+	['Style','FontFormat','FontName','FontSize'],
+	['TextColor','BGColor'],
+	['FitWindow','-','About']
+];
+
+FCKConfig.ToolbarSets["All"] = [
 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
