@@ -1,4 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.2 2006/12/01 02:31:54 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.3 2006/12/02 20:43:28 nickpalmer Exp $ *}
+{if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
@@ -45,3 +46,4 @@ if ( typeof window.addEventListener != "undefined" ) {ldelim}
 
 // -->
 </script>
+{/if}
