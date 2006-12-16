@@ -1,5 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.5 2006/12/15 21:22:15 nickpalmer Exp $ *}
-{if $gBitSystem->isPackageActive('fckeditor') && $textarea_id}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.6 2006/12/16 08:18:05 squareing Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor') && $textarea_id}
 <script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">
