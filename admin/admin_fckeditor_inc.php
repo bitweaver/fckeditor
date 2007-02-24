@@ -5,6 +5,14 @@ $formFckeditorFeatures = array(
 		'label' => 'Enabled debugging',
 		'note' => 'Enable support for debug message output. On first debug message a window will pop up.'
 	),
+	"fckeditor_on_click" => array(
+		'label' => 'Load FCKEditor on Click',
+		'note' => 'Delay loading the FCKEditor until the user clicks on the text area.'
+	),
+	"fckeditor_ask" => array(
+		'label' => 'Ask to use FCKEditor',
+		'note' => 'If set the user will be prompted if they want to use FCKEditor for a given textbox. This option implies Load FCKEditor on Click even if it is not set.'
+	),
 );
 
 
