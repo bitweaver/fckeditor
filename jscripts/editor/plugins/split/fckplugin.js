@@ -65,7 +65,7 @@ FCKSplit.prototype.SetupDiv = function( div )
 	if ( FCKBrowserInfo.IsGecko )
 		div.style.cursor = 'default' ;
 
-	div._fcksplit = '\n...split...' ;
+	div._fcksplit = '...split...' ;
 	
 	div.contentEditable = false ;
 
@@ -87,73 +87,44 @@ FCKSplit.prototype.Exist = function()
 
 	for ( var i = 0 ; i < aSpans.length ; i++ )
 	{
-		if ( aSpans[i]._fcksplit == '\n...split...' )
+		if ( aSpans[i]._fcksplit == '...split...' )
 			return true ;
 	}
 }
 
 
-
-/* NEED TO TEST IN IE - May not need any custom parsing
- * IE code here is from placeholder.js model. 
- */
-/*
-if ( FCKBrowserInfo.IsIE )
+FCKSplit.prototype.Redraw = function()
 {
-	FCKSplit.prototype.Redraw = function()
-	{
+	if ( FCK.EditorDocument.getElementById('_fcksplit' ) != null ){
+		var oNode = FCK.EditorDocument.getElementById('_fcksplit');
+		var tNode = oNode.previousSibling;
 		
-		var aPlaholders = FCK.EditorDocument.body.innerText.match( /\[\[[^\[\]]+\]\]/g ) ;
-		if ( !aPlaholders )
-			return ;
+		var nIndex = tNode.nodeValue.indexOf( '...split...' ) ;
+		
+		var oDiv = FCK.EditorDocument.createElement( 'DIV' ) ;
+		var split = new FCKSplit();
+		split.SetupDiv( oDiv );
+			
+		var str1 = tNode.nodeValue.substring(0,nIndex);
+		var node1 = FCK.EditorDocument.createTextNode( str1 );
 
-		var oRange = FCK.EditorDocument.body.createTextRange() ;
-
-		for ( var i = 0 ; i < aPlaholders.length ; i++ )
-		{
-			if ( oRange.findText( aPlaholders[i] ) )
-			{
-				var sName = aPlaholders[i].match( /\[\[\s*([^\]]*?)\s*\]\]/ )[1] ;
-				oRange.pasteHTML( '<span style="color: #000000; background-color: #ffff00" contenteditable="false" _fcksplit="' + sName + '">' + aPlaholders[i] + '</span>' ) ;
-			}
-		}
+		tNode.parentNode.insertBefore( oDiv, tNode );
+		tNode.parentNode.insertBefore( node1, oDiv );
+		
+		tNode.parentNode.removeChild( oNode ) ;
+		tNode.parentNode.removeChild( tNode ) ;
+		
 	}
 }
-else
+
+FCKSplit.prototype._AcceptNode = function( node )
 {
-*/
-	FCKSplit.prototype.Redraw = function()
-	{
-		if ( FCK.EditorDocument.getElementById('_fcksplit' ) != null ){
-			var oNode = FCK.EditorDocument.getElementById('_fcksplit');
-			var tNode = oNode.previousSibling;
-			
-			var nIndex = tNode.nodeValue.indexOf( '\n...split...' ) ;
-			
-			var oDiv = FCK.EditorDocument.createElement( 'DIV' ) ;
-			var split = new FCKSplit();
-			split.SetupDiv( oDiv );
-				
-			var str1 = tNode.nodeValue.substring(0,nIndex);
-			var node1 = FCK.EditorDocument.createTextNode( str1 );
+	if ( /...split.../.test( node.nodeValue ) )
+		return NodeFilter.FILTER_ACCEPT ;
+	else
+		return NodeFilter.FILTER_SKIP ;
+}
 
-			tNode.parentNode.insertBefore( oDiv, tNode );
-			tNode.parentNode.insertBefore( node1, oDiv );
-			
-			tNode.parentNode.removeChild( oNode ) ;
-			tNode.parentNode.removeChild( tNode ) ;
-			
-		}
-	}
-
-	FCKSplit.prototype._AcceptNode = function( node )
-	{
-		if ( /\n...split.../.test( node.nodeValue ) )
-			return NodeFilter.FILTER_ACCEPT ;
-		else
-			return NodeFilter.FILTER_SKIP ;
-	}
-//}
 
 FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKSplit.prototype.Redraw ) ;
 
@@ -163,10 +134,11 @@ FCKXHtml.TagProcessors['div'] = function( node, htmlNode )
 {
 	if ( htmlNode._fcksplit ){	
 		node = document.createDocumentFragment();
-		node.appendChild( FCKXHtml.XML.createTextNode( htmlNode._fcksplit ) );
+		var txt = document.createTextNode( htmlNode._fcksplit );
+		node.appendChild( txt );
 		var br = document.createElement('BR');
 		br.id = "_fcksplit";
-		node.appendChild( br );
+		node.appendChild( br );		
 	}else{
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 	}
