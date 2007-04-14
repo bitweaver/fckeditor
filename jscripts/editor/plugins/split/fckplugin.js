@@ -1,4 +1,23 @@
-﻿//Begin Code 
+﻿/*
+ * Split plugin for FCKeditor for Bitweaver CMS
+ * Copyright (C) 2007 Will James, Bitweaver.org
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ * 		http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * File Authors:
+ * 		Will James (will@onnyturf.com)
+ *
+ * Instructions:
+ * 		To add Split to your FCKeditor include the following in your fckconfig.js file: 
+ * 		FCKConfig.Plugins.Add( 'split' ) ; 
+ *
+ * 		And add the following to your FCKConfig.ToolbarSets:
+ * 		['Split']
+ *
+ */
+
+//Begin Code 
 var FCKSplit = function(name)  
 {  
 	this.Name = name;  
