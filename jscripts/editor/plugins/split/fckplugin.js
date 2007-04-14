@@ -53,7 +53,7 @@ FCKSplit.prototype.Add = function()
 
 FCKSplit.prototype.SetupDiv = function( div )
 {
-	div.innerHTML = 'READ MORE BREAK -- EVERYTHING BELOW WILL BE IN THE READ MORE SECTION' ;
+	div.innerHTML = 'READ MORE SPLIT -- EVERYTHING BELOW WILL BE IN THE READ MORE SECTION' ;
 
 	//div.style.backgroundColor = '#ffff33' ;
 	div.style.color = '#ff3300' ;
