@@ -25,32 +25,23 @@ var FCKSplit = function(name)
  
 FCKSplit.prototype.Execute = function()  
 {
+	if ( this.Exist() )
+	{
+		//language connection is busted somewhere deeper in FCK
+		//alert( FCKLang.SplitErrNameInUse );
+		alert( 'There is already a split in your document.' ) ;
+		return false ;
+	}
 	if(document.all)  
 	{  
-	alert('in all');
 		mySelection = FCK.EditorDocument.selection;
-
-		myTextRange= mySelection.createRange(); 
-	
-		FCK.InsertHtml("\n...split...");
-	
-		myTextRange.select();
 	}  
 	else  
 	{
-		if ( this.Exist() )
-		{
-			//language connection is busted somewhere deeper in FCK
-			//alert( FCKLang.SplitErrNameInUse );
-			alert( 'There is already a split in your document.' ) ;
-			return false ;
-		}
-
 		mySelection = FCK.EditorWindow.getSelection();
-		this.Add();
-		return true;
 	}  
-
+	this.Add();
+	return true;
 }  
 
 FCKSplit.prototype.Add = function()
