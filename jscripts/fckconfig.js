@@ -40,6 +40,8 @@ FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCK
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
 // FCKConfig.Plugins.Add( 'autogrow' ) ;
+FCKConfig.Plugins.Add( 'split' ) ; 
+FCKConfig.Plugins.Add( 'attachment' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -157,7 +159,19 @@ FCKConfig.ToolbarSets["All"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
+	['Source'],
 	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
+] ;
+
+FCKConfig.ToolbarSets["WorkingLife"] = [
+	['Source'],
+	['Bold','Italic','StrikeThrough','-','Indent','Outdent','OrderedList','UnorderedList','-','Link','Unlink'],
+	['Split'],['Image'],['Attachment']
+] ;
+
+FCKConfig.ToolbarSets["WorkingLifeComments"] = [
+	['Source'],
+	['Bold','Italic','StrikeThrough','-','Indent','Outdent','OrderedList','UnorderedList','-','Link','Unlink']
 ] ;
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
@@ -179,8 +193,8 @@ FCKConfig.MaxUndoLevels = 15 ;
 FCKConfig.DisableObjectResizing = false ;
 FCKConfig.DisableFFTableHandles = true ;
 
-FCKConfig.LinkDlgHideTarget		= false ;
-FCKConfig.LinkDlgHideAdvanced	= false ;
+FCKConfig.LinkDlgHideTarget		= true ;
+FCKConfig.LinkDlgHideAdvanced	= true ;
 
 FCKConfig.ImageDlgHideLink		= false ;
 FCKConfig.ImageDlgHideAdvanced	= false ;
@@ -216,12 +230,12 @@ FCKConfig.FlashBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/br
 FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
 FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
 
-FCKConfig.LinkUpload = true ;
+FCKConfig.LinkUpload = false ;
 FCKConfig.LinkUploadURL = FCKConfig.BasePath + 'filemanager/upload/' + _QuickUploadLanguage + '/upload.' + _QuickUploadLanguage ;
 FCKConfig.LinkUploadAllowedExtensions	= "" ;			// empty for all
 FCKConfig.LinkUploadDeniedExtensions	= ".(php|php3|php5|phtml|asp|aspx|ascx|jsp|cfm|cfc|pl|bat|exe|dll|reg|cgi)$" ;	// empty for no one
 
-FCKConfig.ImageUpload = true ;
+FCKConfig.ImageUpload = false ;
 FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/upload/' + _QuickUploadLanguage + '/upload.' + _QuickUploadLanguage + '?Type=Image' ;
 FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png)$" ;		// empty for all
 FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one

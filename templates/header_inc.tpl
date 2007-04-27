@@ -1,7 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.7 2007/02/24 16:00:59 nickpalmer Exp $ *}
-{if $gBitSystem->isPackageActive('fckeditor') && $textarea_id}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.8 2007/04/27 12:44:44 wjames5 Exp $ *}
+{if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">
+alert('see me');
 <!--
 function FCKify(textarea) {ldelim}
 	var oFCKeditor = new FCKeditor( textarea.name ) ;
@@ -64,7 +65,6 @@ if ( typeof window.addEventListener != "undefined" ) {ldelim}
 		window.onload = FCKall;
 	{rdelim}
 {rdelim}
-
 // -->
 </script>
 {/if}
