@@ -141,50 +141,49 @@ FCKAttachment.prototype.Redraw = function(){
 	for ( var n = 0 ; n < aNodes.length ; n++ ){			
 		// Get all attachment tags in each Node
 		var aPieces = [];
+		var aStrings = [];
 		if ( /\{attachment\s+([^\}]*)\}/.test( aNodes[n].nodeValue ) ){
 			aPieces = aPieces.concat( aNodes[n].nodeValue.match(/\{attachment\s+([^\}]*)\}/g) );
 			aStrings = aNodes[n].nodeValue.split( /\{attachment\s+([^\}]*)\}/g ) ;
 		}
-		
+
+		var x = 0;
 		for ( var i = 0 ; i < aStrings.length ; i++ ){
-			alert(":"+aStrings[i]+":");
-		}
-		
-		/*
-		for ( var i = 0 ; i < aPieces.length ; i++ ){
-			if ( aPieces[i].length > 0 ){				
+			if ( i%2 ){					
+				// Get the ID for the attachment
+				var id = aPieces[x].match( /\{attachment\b.*\bid=['"]?(\d+)[^\}]*\}/ )[1];
+				var size = /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/.test(aPieces[x]) ? aPieces[x].match( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/ )[1] : 'medium';
+				var obj;
+				var match = false;
+				// first look for a matching record in memory for the id given
+				for(o in FCKAttachment_Data){
+					if ( FCKAttachment_Data[o].id == id ){
+						obj = FCKAttachment_Data[o];
+						var match = true;
+						break;
+					}
+				}
+				//if we don't have a matching attachment id in memory we ask the server for it
+				if ( match == false ){
+					//var match = true;						
+				}
+				//if we still don't have a matching id then bail out
+				if ( match == true ){
+					var oImg = FCK.EditorDocument.createElement( 'IMG' ) ;
+					var FCKA = new FCKAttachment();
+					FCKA.SetupImg( oImg, obj, size ) ;
+
+					aNodes[n].parentNode.insertBefore( oImg, aNodes[n] ) ;						
+				}else{
+					alert('No record for specified attachment id:'+id+' could be found! No image or file will be displayed.');
+				}
 				
-					// Get the ID for the attachment
-					var id = aPieces[i].match( /\{attachment\b.*\bid=['"]?(\d+)[^\}]*\}/ )[1];
-					var size = /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/.test(aPieces[i]) ? aPieces[i].match( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/ )[1] : 'medium';
-					var obj;
-					var match = false;
-					// first look for a matching record in memory for the id given
-					for(o in FCKAttachment_Data){
-						if ( FCKAttachment_Data[o].id == id ){
-							obj = FCKAttachment_Data[o];
-							var match = true;
-							break;
-						}
-					}
-					//if we don't have a matching attachment id in memory we ask the server for it
-					if ( match == false ){
-						//var match = true;						
-					}
-					//if we still don't have a matching id then bail out
-					if ( match == true ){
-						var oImg = FCK.EditorDocument.createElement( 'IMG' ) ;
-						var FCKA = new FCKAttachment();
-						FCKA.SetupImg( oImg, obj, size ) ;
-	
-						aNodes[n].parentNode.insertBefore( oImg, aNodes[n] ) ;						
-					}else{
-						alert('No record for specified attachment id:'+id+' could be found! No image or file will be displayed.');
-					}
+				x++;
+			}else{
+				aNodes[n].parentNode.insertBefore( FCK.EditorDocument.createTextNode( aStrings[i] ) , aNodes[n] ) ;
 			}
 		}
 		aNodes[n].parentNode.removeChild( aNodes[n] ) ;
-		*/
 	}
 }
 
