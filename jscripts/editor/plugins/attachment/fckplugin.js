@@ -41,7 +41,7 @@ FCKAttachment_Data = [];
 FCKCommands.RegisterCommand( 'Attachment', new FCKDialogCommand( 'Attachment', 'Insert Image', FCKPlugins.Items['attachment'].Path + 'fck_attachment.html', 550, 500) );
 
 // Create the "Plaholder" toolbar button.
-var oAttachmentItem = new FCKToolbarButton( 'Attachment', 'Add Image' ) ;
+var oAttachmentItem = new FCKToolbarButton( 'Attachment', 'Add Image', 'Insert/Upload image attachment', FCK_TOOLBARITEM_ONLYTEXT, false, true );
 //oAttachmentItem.IconPath = FCKPlugins.Items['attachment'].Path + 'attachment.gif' ;
 
 FCKToolbarItems.RegisterItem( 'Attachment', oAttachmentItem ) ;

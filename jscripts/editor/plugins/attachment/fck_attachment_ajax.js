@@ -60,6 +60,7 @@ function ajax_updater(target, url, pg) {
 
 function ajax_error( request ) {
 	alert( 'Sorry, there was a problem getting the requested data.' );
+	MochiKit.Style.hideElement('spinner');
 }
 
 //what do I need this for? -wjames5
