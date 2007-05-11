@@ -17,22 +17,6 @@
  *
  */
 
-
-/* 
-// manage the plugins' button behavior  
-FCKAttachment.prototype.GetState = function()  
-{  
-	return FCK_TRISTATE_OFF;  
-}  
- 
-FCKCommands.RegisterCommand( 'Attachment', new FCKAttachment('Attachment')) ;  
-
-// Create the toolbar button. 
-var oAttachmentItem = new FCKToolbarButton( 'Attachment', 'Insert Attachment', 'Insert a attachment to create a Read More area', FCK_TOOLBARITEM_ONLYTEXT, false, true );
-//oAttachmentItem.IconPath = FCKPlugins.Items['attachment'].Path + 'attachment.gif' ; 
-FCKToolbarItems.RegisterItem( 'Attachment', oAttachmentItem ) ;  
-*/
-
 MochiKit = parent.MochiKit;
 
 FCKAttachment_Data = [];
@@ -48,12 +32,13 @@ FCKToolbarItems.RegisterItem( 'Attachment', oAttachmentItem ) ;
 
 
 // The object used for all Attachment operations.
-var FCKAttachment = function(name)  
+var FCKAttachment = function()  
 {  
-	this.Name = name;  
 	this.aNodes = [];
-	//this.aNodes[n].aStrings = [];
-	//this.aNodes[n].aPieces = [];	
+	this.aStrings = [];
+	this.aPieces = [];
+	this.aIds = [];
+	this.aSizes = [];
 }  
 
 
@@ -137,45 +122,72 @@ FCKAttachment.prototype.SetupImg = function( img, obj, size )
 
 // Redraw
 FCKAttachment.prototype.Redraw = function(){
-	// Walk the body DOM tree and grab all nodes that have an attachment tag in them
-	// FCKAttachment._AcceptNode
-	var oInteractor = FCK.EditorDocument.createTreeWalker( FCK.EditorDocument.body, NodeFilter.SHOW_TEXT, FCKAttachment._AcceptNode, true ) ;
-	this.aNodes = new Array() ;
-	while ( oNode = oInteractor.nextNode() ){
-		this.aNodes[ this.aNodes.length ] = oNode ;
+	if ( FCKBrowserInfo.IsIE ){
+		this.aNodes = new Array() ;
+		this.aNodes[0] = FCK.EditorDocument.body.innerText;
+		this.ProcessNodeForIE(0);
+		this.VerifyAttachmentData(0);
+	}else{
+		// Walk the body DOM tree and grab all nodes that have an attachment tag in them
+		// FCKAttachment._AcceptNode
+		var oInteractor = FCK.EditorDocument.createTreeWalker( FCK.EditorDocument.body, NodeFilter.SHOW_TEXT, FCKAttachment._AcceptNode, true ) ;
+		this.aNodes = new Array() ;
+		while ( oNode = oInteractor.nextNode() ){
+			this.aNodes[ this.aNodes.length ] = oNode ;
+		}
+		for ( var n = 0 ; n < this.aNodes.length ; n++ ){	
+			// process nodes
+			this.ProcessNode(n);
+			this.VerifyAttachmentData(n);
+		}
 	}
-	for ( var n = 0 ; n < this.aNodes.length ; n++ ){	
-		// process nodes
-		this.ProcessNode(n);
-		this.VerifyAttachmentData(n);
-	}	
+}
+
+
+FCKAttachment.prototype.ProcessNodeForIE = function( n ){
+	this.aPieces[n] = new Array();
+	this.aIds[n] = new Array();
+	this.aSizes[n] = new Array();
+	
+	var node = this.aNodes[n];
+
+	// Get each attachment and values
+	if ( /\{attachment\s+([^\}]*)\}/.test( node ) ){
+		this.aPieces[n] = this.aNodes[n].match( /\{attachment\s+([^\}]*)\}/g ) ;
+	}
+	if ( this.aPieces[n] ){
+		for ( var i = 0 ; i < this.aPieces[n].length ; i++ ){		
+			this.aIds[n][i] = this.aPieces[n][i].match( /\{attachment\b.*\bid=['"]?(\d+)[^\}]*\}/ )[1];
+			this.aSizes[n][i] = ( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/.test( this.aPieces[n][i] ) ? this.aPieces[n][i].match( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/ )[1] : 'medium' );
+		}
+	}
 }
 
 
 FCKAttachment.prototype.ProcessNode = function( n ){
-	this.aNodes[n].aPieces = new Array();
-	this.aNodes[n].aStrings = new Array();
-	this.aNodes[n].aIds = new Array();
-	this.aNodes[n].aSizes = new Array();
+	this.aPieces[n] = new Array();
+	this.aStrings[n] = new Array();
+	this.aIds[n] = new Array();
+	this.aSizes[n] = new Array();
 	
 	var node = this.aNodes[n];
 	
 	// Get all surrounding strings and attachment tags in each Node
 	if ( /\{attachment\s+([^\}]*)\}/.test( node.nodeValue ) ){
-		node.aPieces = node.aPieces.concat( node.nodeValue.match(/\{attachment\s+([^\}]*)\}/g) );
-		node.aStrings = node.nodeValue.split( /\{attachment\s+([^\}]*)\}/g ) ;
+		this.aPieces[n] = this.aPieces[n].concat( node.nodeValue.match(/\{attachment\s+([^\}]*)\}/g) );
+		this.aStrings[n] = node.nodeValue.split( /\{attachment\s+([^\}]*)\}/g ) ;
 	}
-
-	for ( var i = 0 ; i < node.aPieces.length ; i++ ){
+	
+	for ( var i = 0 ; i < this.aPieces[n].length ; i++ ){
 		// Get the id and size for the attachment
-		node.aIds.push ( node.aPieces[i].match( /\{attachment\b.*\bid=['"]?(\d+)[^\}]*\}/ )[1] );
-		node.aSizes.push ( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/.test( node.aPieces[i] ) ? node.aPieces[i].match( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/ )[1] : 'medium' );
+		this.aIds[n].push ( this.aPieces[n][i].match( /\{attachment\b.*\bid=['"]?(\d+)[^\}]*\}/ )[1] );
+		this.aSizes[n].push ( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/.test( this.aPieces[n][i] ) ? this.aPieces[n][i].match( /\{attachment\b.*\bsize=['"]?(\w+)[^\}]*\}/ )[1] : 'medium' );
 	}
 }
 
 
 FCKAttachment.prototype.VerifyAttachmentData = function(n){
-	var ids = this.aNodes[n].aIds;
+	var ids = this.aIds[n];
 	var self = this;
 	var requests = [];
 	for ( var i = 0 ; i < ids.length ; i++ ){
@@ -198,7 +210,11 @@ FCKAttachment.prototype.VerifyAttachmentData = function(n){
 		var l1 = new MochiKit.Async.DeferredList(requests, false, false, true);
 		l1.addCallback( function(resultList){ self.ProcessResults(resultList, n) } );
 	}else{
-	    this.ReplaceNodes(n);
+		if ( FCKBrowserInfo.IsIE ){
+			this.ReplaceNodesForIE(n);
+		}else{
+			this.ReplaceNodes(n);
+	    }
 	}
 }
 
@@ -225,7 +241,59 @@ FCKAttachment.prototype.ProcessResults = function(data, n){
             alert("There was an error requesting attachment information: " + rslt[1]);
         }
     }, data);
-    this.ReplaceNodes(n);
+	if ( FCKBrowserInfo.IsIE ){
+		this.ReplaceNodesForIE(n);
+	}else{
+		this.ReplaceNodes(n);
+	}
+}
+
+
+FCKAttachment.prototype.ReplaceNodesForIE = function(n){
+	var oRange = FCK.EditorDocument.body.createTextRange();
+
+	for ( var i = 0 ; i < this.aPieces[n].length; i++ ){
+		if ( oRange.findText(this.aPieces[n][i]) ){
+			var id = this.aIds[n][i];
+			var size = this.aSizes[n][i];
+			var obj;
+			var match = false;
+			
+			// first look for a matching record in memory
+			for(o in FCKAttachment_Data){
+				if ( FCKAttachment_Data[o].id == id ){
+					obj = FCKAttachment_Data[o];
+					var match = true;
+					break;
+				}
+			}
+			if ( match == true ){
+				var url;
+				switch (size)
+				{
+					case 'avatar':
+						url = obj.avatar;
+						break;
+					case 'small':
+						url = obj.small;
+						break;
+					case 'medium':
+						url = obj.medium;
+						break;
+					case 'large':
+						url = obj.large;
+						break;
+					case 'original':
+						url = obj.url;			
+						break;
+				}
+				var oImg = '<img src="' + url + '" _fck_attachment_id="' + id + '" _fck_attachment_size="' + size + '" _fck_attachment="{attachment id=' + id + ' size=' + size + '}" />';
+				oRange.pasteHTML( oImg );
+			}else{
+				oRange.pasteHTML( '{attachment id=' + id + ' size=' + size + '}' );
+			}
+		}
+	}
 }
 
 
@@ -233,11 +301,11 @@ FCKAttachment.prototype.ReplaceNodes = function(n){
 	var node = this.aNodes[n];
 	
 	var x = 0;
-	if (node.aStrings.length > 0){
-		for ( var i = 0 ; i < node.aStrings.length ; i++ ){
+	if (this.aStrings[n].length > 0){
+		for ( var i = 0 ; i < this.aStrings[n].length ; i++ ){
 			if ( i%2 ){
-				var id = node.aIds[x];
-				var size = node.aSizes[x];
+				var id = this.aIds[n][x];
+				var size = this.aSizes[n][x];
 				var obj;
 				var match = false;
 				// first look for a matching record in memory
@@ -255,11 +323,11 @@ FCKAttachment.prototype.ReplaceNodes = function(n){
 				}else{
 					//if we don't have a matching id then just add the attachment tag back into the text
 					alert('No record for specified attachment id:'+id+' could be found! No image or file will be displayed.');
-					node.parentNode.insertBefore( FCK.EditorDocument.createTextNode( aStrings[i] ) , node ) ;
+					node.parentNode.insertBefore( FCK.EditorDocument.createTextNode( this.aStrings[n][i] ) , node ) ;
 				}		
 				x++;
 			}else{
-				node.parentNode.insertBefore( FCK.EditorDocument.createTextNode( node.aStrings[i] ) , node ) ;
+				node.parentNode.insertBefore( FCK.EditorDocument.createTextNode( this.aStrings[n][i] ) , node ) ;
 			}
 		}
 		node.parentNode.removeChild( node ) ;
@@ -295,11 +363,11 @@ Attachment = new FCKAttachment();
 FCK.Events.AttachEvent( 'OnAfterSetHTML', MochiKit.Base.bind( Attachment.Redraw, Attachment) ) ;
 
 
-// We must process the DIV tags to replace it with the real resulting value of the placeholder.
+// We must process the IMG tags to replace it with the real resulting value of the attachment.
 FCKXHtml.TagProcessors['img'] = function( node, htmlNode )
 {
 	if ( htmlNode._fck_attachment){
-		node = document.createTextNode( htmlNode._fck_attachment );
+		node = FCKXHtml.XML.createTextNode( htmlNode._fck_attachment );
 	}else{
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 	}
