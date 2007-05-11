@@ -9,7 +9,7 @@ function liberty_uploader(file, action, waitmsg, frmid, actionid) {
 	}
 	else {
 		liberty_uploader_under_way = 1;
-		MochiKit.DOM.showElement('spinner');
+		MochiKit.Style.showElement('spinner');
 		var old_target = file.form.target;
 		file.form.target = frmid;
 		var old_action = file.form.action;
@@ -52,7 +52,7 @@ function liberty_uploader_complete(frmid, divid, fileid) {
 
 function ajax_updater(target, url, pg) {
 	fck_attachment_target = target;
-	MochiKit.DOM.showElement('spinner');
+	MochiKit.Style.showElement('spinner');
 	var params = "?json=true" + ( pg != null ? "&pgnPage="+pg:"");
 	var myAjax = loadJSONDoc( url + params );
 	myAjax.addCallbacks(ajax_result_handler, ajax_error);
@@ -63,6 +63,7 @@ function ajax_error( request ) {
 }
 
 //what do I need this for? -wjames5
+/*
 function ajax_get_and_call(element, func, url, force) {
 	if (!force && element.loadedResponse) {
 		func(element.loadedResponse);
@@ -75,9 +76,10 @@ function ajax_get_and_call(element, func, url, force) {
 		 ajax_error);
 	}
 }
+*/
 
 function ajax_result_handler(rslt){
-	MochiKit.DOM.hideElement('spinner');
+	MochiKit.Style.hideElement('spinner');
 	if (rslt.Status.code == 200){
 		process_rslt_data( rslt.Attachments );
 		if ( rslt.Pagination ){
@@ -130,20 +132,6 @@ function fck_attach_by_id( id ){
 	}
 	
 	FCKAttachment.AddAttachment( obj, fck_attachment_size );
-	Ok();
-}
-
-function show_spinner(id) {
-/*
-	Ajax.Responders.register({
-		onCreate: function() {
-			if (Ajax.activeRequestCount > 0)
-			Element.show(id);
-		},
-		onComplete: function() {
-			if (Ajax.activeRequestCount == 0)
-			Element.hide(id);
-		}
-	});
-*/
+	imgType = 'attachment';
+	parent.parent.Ok();
 }
