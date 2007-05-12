@@ -132,20 +132,27 @@ FCK.Events.AttachEvent( 'OnAfterSetHTML', FCKSplit.prototype.Redraw ) ;
 // We must process the DIV tags to replace it with the real resulting value of the placeholder.
 FCKXHtml.TagProcessors['div'] = function( node, htmlNode )
 {
-	if ( htmlNode._fcksplit ){	
-		node = document.createDocumentFragment();
-		var txt = document.createTextNode( htmlNode._fcksplit );
-		node.appendChild( txt );
-		var br = document.createElement('BR');
-		br.id = "_fcksplit";
-		node.appendChild( br );		
+
+	if ( htmlNode._fcksplit ){
+		node = FCKXHtml.XML.createDocumentFragment();
+		var txt = FCKXHtml.XML.createTextNode( htmlNode._fcksplit );		
+		node.insertBefore( txt, node.nextSibling );
+		var br = FCKXHtml.XML.createElement('BR');
+		FCKXHtml._AppendAttribute(br,'id','_fcksplit');
+		node.insertBefore( br, node.nextSibling );		
+		/* depricated only worked in FFox
+			node = document.createDocumentFragment();
+			var txt = document.createTextNode( htmlNode._fcksplit );
+			node.appendChild( txt );
+			var br = document.createElement('BR');
+			br.id = "_fcksplit";
+			node.appendChild( br );
+		*/
 	}else{
 		FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
 	}
 	return node;
 }
-
-
 
  
 // manage the plugins' button behavior  
