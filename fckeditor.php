@@ -1,4 +1,9 @@
 <?php 
+/**
+ * @version $Header: /cvsroot/bitweaver/_fckeditor/fckeditor.php,v 1.2 2007/06/22 09:25:08 lsces Exp $
+ * @package fckeditor
+ */
+
 /*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2006 Frederico Caldeira Knabben
@@ -21,7 +26,10 @@
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
 
-class FCKeditor
+/**
+ * @package fckeditor
+ */
+ class FCKeditor
 {
 	var $InstanceName ;
 	var $BasePath ;
