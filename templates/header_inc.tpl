@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.9 2007/04/30 17:27:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.10 2007/06/28 15:07:24 nickpalmer Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">/*<![CDATA[*/
@@ -36,16 +36,18 @@ function FCKprompt(textarea) {ldelim}
 function FCKall() {ldelim}
 	var allTextAreas = document.getElementsByTagName("textarea");
 	for (var i=0; i < allTextAreas.length; i++) {ldelim}
-		{if $gBitSystem->isFeatureActive("fckeditor_ask") ||
-		    $gBitSystem->isFeatureActive("fckeditor_on_click")}
-			allTextAreas[i].onclick = function() {ldelim} FCKprompt(this); {rdelim};
-			{if !$gBitSystem->isFeatureActive("fckeditor_ask")}
-				allTextAreas[i].promptedFCK=1;
-				allTextAreas[i].useFCK=1;
+		if (allTextAreas[i].className.substr(0,7) == 'wysiwyg') {ldelim}
+			{if $gBitSystem->isFeatureActive("fckeditor_ask") ||
+			    $gBitSystem->isFeatureActive("fckeditor_on_click")}
+				allTextAreas[i].onclick = function() {ldelim} FCKprompt(this); {rdelim};
+				{if !$gBitSystem->isFeatureActive("fckeditor_ask")}
+					allTextAreas[i].promptedFCK=1;
+					allTextAreas[i].useFCK=1;
+				{/if}
+			{else}
+				FCKify(allTextAreas[i]);
 			{/if}
-		{else}
-			FCKify(allTextAreas[i]);
-		{/if}
+		{rdelim}
 	{rdelim}
 {rdelim}
 if ( typeof window.addEventListener != "undefined" ) {ldelim}
