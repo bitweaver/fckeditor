@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.10 2007/06/28 15:07:24 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.11 2007/08/19 09:31:33 laetzer Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">/*<![CDATA[*/
@@ -26,7 +26,7 @@ function FCKify(textarea) {ldelim}
 {rdelim}
 function FCKprompt(textarea) {ldelim}
 	if (!textarea.promptedFCK) {ldelim}
-		textarea.useFCK=confirm("Would you like to use the WYSIWYG editor for this box?");
+		textarea.useFCK=confirm("{tr}Would you like to use the WYSIWYG editor for this text area?{/tr}");
 		textarea.promptedFCK=1;
 	{rdelim}
 	if (textarea.useFCK) {ldelim}
