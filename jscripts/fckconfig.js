@@ -40,8 +40,8 @@ FCKConfig.PreloadImages = [ FCKConfig.SkinPath + 'images/toolbar.start.gif', FCK
 FCKConfig.PluginsPath = FCKConfig.BasePath + 'plugins/' ;
 
 // FCKConfig.Plugins.Add( 'autogrow' ) ;
-FCKConfig.Plugins.Add( 'split' ) ; 
-FCKConfig.Plugins.Add( 'attachment' ) ; 
+//FCKConfig.Plugins.Add( 'split' ) ; 
+//FCKConfig.Plugins.Add( 'attachment' ) ; 
 FCKConfig.AutoGrowMax = 400 ;
 
 // FCKConfig.ProtectedSource.Add( /<%[\s\S]*?%>/g ) ;	// ASP style server side code <%...%>
@@ -163,16 +163,10 @@ FCKConfig.ToolbarSets["Basic"] = [
 	['Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
 ] ;
 
-FCKConfig.ToolbarSets["WorkingLife"] = [
-	['Source'],
-	['Bold','Italic','StrikeThrough','-','Indent','Outdent','OrderedList','UnorderedList','-','Link','Unlink'],
-	['Split'],['Image'],['Attachment']
-] ;
-
-FCKConfig.ToolbarSets["WorkingLifeComments"] = [
-	['Source'],
-	['Bold','Italic','StrikeThrough','-','Indent','Outdent','OrderedList','UnorderedList','-','Link','Unlink']
-] ;
+// to add split plugin add this to array of tools in your selected ToolbarSet
+//	['Split']
+// to add attachment plugin add this to array of tools in your selected ToolbarSet
+//	['Attachment']
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
 
