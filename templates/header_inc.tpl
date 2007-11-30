@@ -1,12 +1,10 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.11 2007/08/19 09:31:33 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.12 2007/11/30 10:32:33 nickpalmer Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor')}
-<script type="text/javascript" src="{$smarty.const.FCKEDITOR_PKG_URL}jscripts/fckeditor.js"></script>
 <script type="text/javascript">/*<![CDATA[*/
 function FCKify(textarea) {ldelim}
 	var oFCKeditor = new FCKeditor( textarea.name ) ;
 	// TODO: Hook things from admin panel in here.
 	oFCKeditor.BasePath = "{$smarty.const.FCKEDITOR_PKG_URL}jscripts/";
-	test = "{$gBitSystem->getConfig('fckedit_toolbars')}";
 	{if !$gBitSystem->getConfig('fckedit_toolbars')}
 		oFCKeditor.ToolbarSet = "Basic";
 	{else}
