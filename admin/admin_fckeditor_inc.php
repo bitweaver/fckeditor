@@ -2,8 +2,8 @@
 
 $formFckeditorFeatures = array(
 	"fckeditor_custom_config" => array(
-		'label' => 'Custom Config Faile',
-		'note' => 'Use a custom configuration file located at: ' + FCKEDITOR_PKG_PATH . 'fckconfig.custom.js. You can copy the jscripts/fckconfig.js or the fckconfig.bitweaver.js and modify to your needs.'
+		'label' => 'Custom Config File',
+		'note' => 'Use a custom configuration file located at: ' . FCKEDITOR_PKG_PATH . 'fckconfig.custom.js. You can copy the jscripts/fckconfig.js or the fckconfig.bitweaver.js and modify to your needs.'
 	),
 	"fckeditor_debug" => array(
 		'label' => 'Enabled debugging',
