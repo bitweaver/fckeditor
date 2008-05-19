@@ -1,11 +1,11 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.14 2008/03/09 22:19:06 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.15 2008/05/19 13:17:19 wjames5 Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript">/*<![CDATA[*/
 function FCKify(textarea) {ldelim}
 	var oFCKeditor = new FCKeditor( textarea.name ) ;
 	// TODO: Hook things from admin panel in here.
 	oFCKeditor.BasePath = "{$smarty.const.FCKEDITOR_PKG_URL}jscripts/";
-	{if $gBitSystem->getConfig('fckeditor_custom_config')}
+	{if $gBitSystem->getConfig('fckeditor_custom_config') == "y"}
 		oFCKeditor.Config['CustomConfigurationsPath'] =  "{$smarty.const.FCKEDITOR_PKG_URL}fckconfig.custom.js";
 	{else}
 		oFCKeditor.Config['CustomConfigurationsPath'] =  "{$smarty.const.FCKEDITOR_PKG_URL}fckconfig.bitweaver.js";
