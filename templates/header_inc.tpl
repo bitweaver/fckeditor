@@ -1,24 +1,24 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.15 2008/05/19 13:17:19 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.16 2008/05/19 13:24:05 squareing Exp $ *}
 {if $gBitSystem->isPackageActive('fckeditor')}
 <script type="text/javascript">/*<![CDATA[*/
 function FCKify(textarea) {ldelim}
 	var oFCKeditor = new FCKeditor( textarea.name ) ;
 	// TODO: Hook things from admin panel in here.
 	oFCKeditor.BasePath = "{$smarty.const.FCKEDITOR_PKG_URL}jscripts/";
-	{if $gBitSystem->getConfig('fckeditor_custom_config') == "y"}
+	{if $gBitSystem->isFeatureActive('fckeditor_custom_config')}
 		oFCKeditor.Config['CustomConfigurationsPath'] =  "{$smarty.const.FCKEDITOR_PKG_URL}fckconfig.custom.js";
 	{else}
 		oFCKeditor.Config['CustomConfigurationsPath'] =  "{$smarty.const.FCKEDITOR_PKG_URL}fckconfig.bitweaver.js";
 	{/if}
-	{if !$gBitSystem->getConfig('fckedit_toolbars')}
+	{if !$gBitSystem->isFeatureActive('fckedit_toolbars')}
 		oFCKeditor.ToolbarSet = "Basic";
 	{else}
 		oFCKeditor.ToolbarSet = "{$gBitSystem->getConfig('fckedit_toolbars')}";
 	{/if}
-	{if $gBitSystem->getConfig('fckedit_skin')}
+	{if $gBitSystem->isFeatureActive('fckedit_skin')}
 		oFCKeditor.Config['SkinPath'] = oFCKeditor.BasePath + 'editor/skins/{$gBitSystem->getConfig('fckedit_skin')}/';
 	{/if}
-	{if $gBitSystem->getConfig('fckedit_debug')}
+	{if $gBitSystem->isFeatureActive('fckedit_debug')}
 		oFCKeditor.Config['Debug'] = 1;
 	{/if}
 	oFCKeditor.ReplaceTextarea() ;
