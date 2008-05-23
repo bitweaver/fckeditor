@@ -31,6 +31,8 @@ FCKUndo.SaveLocked = false ;
 
 FCKUndo._GetBookmark = function()
 {
+	FCKSelection.Restore() ;
+
 	var range = new FCKDomRange( FCK.EditorWindow ) ;
 	try
 	{

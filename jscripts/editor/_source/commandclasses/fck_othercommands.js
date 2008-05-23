@@ -257,10 +257,7 @@ FCKPageBreakCommand.prototype.Execute = function()
 	var oRange = new FCKDomRange( FCK.EditorWindow ) ;
 	oRange.MoveToSelection() ;
 	var oSplitInfo = oRange.SplitBlock() ;
-	if ( oSplitInfo.NextBlock )
-		oSplitInfo.NextBlock.parentNode.insertBefore( oFakeImage, oSplitInfo.NextBlock ) ;
-	else
-		oSplitInfo.PreviousBlock.parentNode.insertBefore( oFakeImage, oSplitInfo.PreviousBlock.nextSibling ) ;
+	oRange.InsertNode( oFakeImage ) ;
 
 	FCK.Events.FireEvent( 'OnSelectionChange' ) ;
 }

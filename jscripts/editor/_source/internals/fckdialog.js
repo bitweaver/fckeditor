@@ -75,9 +75,16 @@ var FCKDialog = ( function()
 			} ) ;
 	}
 
-	return {
-		SelectionData : null,
+	var resetStyles = function( element )
+	{
+		element.style.cssText = 'margin:0;' +
+			'padding:0;' +
+			'border:0;' +
+			'background-color:transparent;' +
+			'background-image:none;' ;
+	}
 
+	return {
 		/**
 		 * Opens a dialog window using the standard dialog template.
 		 */
@@ -93,40 +100,10 @@ var FCKDialog = ( function()
 				Page : dialogPage,
 				Editor : window,
 				CustomValue : customValue,		// Optional
-				SelectionData : null,
 				TopWindow : topWindow
 			}
 
-			var currentInstance = FCK.ToolbarSet.CurrentInstance ;
-
-			// IE doens't support multiple selections, even if in different
-			// IFRAMEs, like the dialog, so the current selection must be saved to
-			// be restored in the dialog code.
-			if ( FCKBrowserInfo.IsIE && !topDialog )
-			{
-				// Ensures the editor has the selection focus. (#1801)
-				currentInstance.Focus() ;
-
-				var editorDocument = currentInstance.EditorDocument ;
-				var selection = editorDocument.selection ;
-				var range ;
-
-				if ( selection )
-				{
-					range = selection.createRange() ;
-
-					// Ensure that the range comes from the editor document.
-					if ( range )
-					{
-						if ( range.parentElement && FCKTools.GetElementDocument( range.parentElement() ) != editorDocument )
-							range = null ;
-						else if ( range.item && FCKTools.GetElementDocument( range.item(0) )!= editorDocument )
-							range = null ;
-					}
-				}
-
-				this.SelectionData = range ;
-			}
+			FCK.ToolbarSet.CurrentInstance.Selection.Save() ;
 
 			// Calculate the dialog position, centering it on the screen.
 			var viewSize = FCKTools.GetViewPaneSize( topWindow ) ;
@@ -136,6 +113,7 @@ var FCKDialog = ( function()
 
 			// Setup the IFRAME that will hold the dialog.
 			var dialog = topDocument.createElement( 'iframe' ) ;
+			resetStyles( dialog ) ;
 			dialog.src = FCKConfig.BasePath + 'fckdialog.html' ;
 
 			// Dummy URL for testing whether the code in fckdialog.js alone leaks memory.
@@ -181,7 +159,7 @@ var FCKDialog = ( function()
 			else							// First Dialog.
 			{
 				// Set the Focus in the browser, so the "OnBlur" event is not
-				// fired. In IE, there is no need to d othat because the dialog
+				// fired. In IE, there is no need to do that because the dialog
 				// already moved the selection to the editing area before
 				// closing (EnsureSelection). Also, the Focus() call here
 				// causes memory leak on IE7 (weird).
@@ -191,7 +169,9 @@ var FCKDialog = ( function()
 				this.HideMainCover() ;
 				// Bug #1918: Assigning topDialog = null directly causes IE6 to crash.
 				setTimeout( function(){ topDialog = null ; }, 0 ) ;
-				this.SelectionData = null ;
+
+				// Release the previously saved selection.
+				FCK.ToolbarSet.CurrentInstance.Selection.Release() ;
 			}
 		},
 
@@ -199,6 +179,7 @@ var FCKDialog = ( function()
 		{
 			// Setup the DIV that will be used to cover.
 			cover = topDocument.createElement( 'div' ) ;
+			resetStyles( cover ) ;
 			FCKDomTools.SetElementStyles( cover,
 				{
 					'position' : 'absolute',
@@ -214,6 +195,7 @@ var FCKDialog = ( function()
 			if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 			{
 				var iframe = topDocument.createElement( 'iframe' ) ;
+				resetStyles( iframe ) ;
 				iframe.hideFocus = true ;
 				iframe.frameBorder = 0 ;
 				iframe.src = FCKTools.GetVoidUrl() ;

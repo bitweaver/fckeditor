@@ -101,7 +101,7 @@ sub DoResponse
 	}
 
 	# Check for invalid folder paths (..)
-	if ( $sCurrentFolder =~ /\.\./ ) {
+	if ( $sCurrentFolder =~ /(?:\.\.|\\)/ ) {
 		SendError( 102, "" ) ;
 	}
 

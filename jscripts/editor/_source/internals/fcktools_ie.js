@@ -74,6 +74,9 @@ FCKTools.CreateXmlObject = function( object )
 	switch ( object )
 	{
 		case 'XmlHttp' :
+			// Try the native XMLHttpRequest introduced with IE7.
+			try { return new XMLHttpRequest() ; } catch (e) {}
+
 			aObjs = [ 'MSXML2.XmlHttp', 'Microsoft.XmlHttp' ] ;
 			break ;
 

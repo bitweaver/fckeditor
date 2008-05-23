@@ -578,7 +578,7 @@ var FCKDomTools =
 	 *		<b>This <i>is some<span /> sample</i> test text</b>
 	 * If element = <span />, we have these results:
 	 *		<b>This <i>is some</i><span /><i> sample</i> test text</b>			(If parent = <i>)
-	 *		<b>This <i>is some</i></b><span /><b<i> sample</i> test text</b>	(If parent = <b>)
+	 *		<b>This <i>is some</i></b><span /><b><i> sample</i> test text</b>	(If parent = <b>)
 	 */
 	BreakParent : function( element, parent, reusableRange )
 	{
@@ -1005,5 +1005,20 @@ var FCKDomTools =
 		var currentScroll = FCKTools.GetScrollPosition( window ).Y ;
 		if ( offset > 0 && offset > currentScroll )
 			window.scrollTo( 0, offset ) ;
+	},
+
+	/**
+	 * Check if the element can be edited inside the browser.
+	 */
+	CheckIsEditable : function( element )
+	{
+		// Get the element name.
+		var nodeName = element.nodeName.toLowerCase() ;
+
+		// Get the element DTD (defaults to span for unknown elements).
+		var childDTD = FCK.DTD[ nodeName ] || FCK.DTD.span ;
+
+		// In the DTD # == text node.
+		return ( childDTD['#'] && !FCKListsLib.NonEditableElements[ nodeName ] ) ;
 	}
 } ;

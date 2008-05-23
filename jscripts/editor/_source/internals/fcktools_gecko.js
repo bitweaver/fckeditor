@@ -120,36 +120,11 @@ FCKTools.CreateXmlObject = function( object )
 		case 'DOMDocument' :
 			// Originaly, we were had the following here:
 			// return document.implementation.createDocument( '', '', null ) ;
-			//
-			// But, when manipulating document.domain (#123), we had
-			// "Permission denied" errors when trying to call methods inside
-			// the returned object. To avoid it, we have to change to the
-			// following, by implementing a "custom" DOM document object, which
-			// includes the methods that are useful for us.
-
-			var domDoc = document.createDocumentFragment() ;
-
-			domDoc.createElement = function( name )
-			{
-				return document.createElement( name ) ;
-			}
-
-			domDoc.createTextNode = function( text )
-			{
-				return document.createTextNode( text ) ;
-			}
-
-			domDoc.createAttribute = function( attName )
-			{
-				return document.createAttribute( attName ) ;
-			}
-
-			domDoc.createComment = function( text )
-			{
-				return document.createComment( text ) ;
-			}
-
-			return domDoc ;
+			// But that doesn't work if we're running under domain relaxation mode, so we need a workaround.
+			// See http://ajaxian.com/archives/xml-messages-with-cross-domain-json about the trick we're using.
+			var doc = ( new DOMParser() ).parseFromString( '<tmp></tmp>', 'text/xml' ) ;
+			FCKDomTools.RemoveNode( doc.firstChild ) ;
+			return doc ;
 	}
 	return null ;
 }

@@ -31,7 +31,7 @@ FCKTableHandler.GetSelectedCells = function()
 
 	var aCells = new Array() ;
 
-	var oRange = FCK.EditorDocument.selection.createRange() ;
+	var oRange = FCKSelection.GetSelection().createRange() ;
 //	var oParent = oRange.parentElement() ;
 	var oParent = FCKSelection.GetParentElement() ;
 

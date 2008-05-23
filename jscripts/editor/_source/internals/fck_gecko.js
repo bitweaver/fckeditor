@@ -88,7 +88,7 @@ FCK.InitializeBehaviors = function()
 
 		var moveCursor = function()
 		{
-			var selection = FCK.EditorWindow.getSelection() ;
+			var selection = FCKSelection.GetSelection() ;
 			var range = selection.getRangeAt(0) ;
 			if ( ! range || ! range.collapsed )
 				return ;
@@ -104,7 +104,7 @@ FCK.InitializeBehaviors = function()
 
 			// only perform the patched behavior if we're in an <a> tag, or the End key is pressed.
 			var parentTag = node.parentNode.tagName.toLowerCase() ;
-			if ( ! (  parentTag == 'a' ||
+			if ( ! (  parentTag == 'a' || String(node.parentNode.contentEditable) == 'false' ||
 					( ! ( FCKListsLib.BlockElements[parentTag] || FCKListsLib.NonEmptyBlockElements[parentTag] )
 					  && keyCode == 35 ) ) )
 				return ;
@@ -361,6 +361,8 @@ FCK.InsertHtml = function( html )
 	this.EditorDocument.execCommand( 'inserthtml', false, html ) ;
 	this.Focus() ;
 
+	FCKDocumentProcessor.Process( FCK.EditorDocument ) ;
+
 	// For some strange reason the SaveUndoStep() call doesn't activate the undo button at the first InsertHtml() call.
 	this.Events.FireEvent( "OnSelectionChange" ) ;
 }
@@ -446,7 +448,7 @@ FCK._FillEmptyBlock = function( emptyBlockNode )
 FCK._ExecCheckEmptyBlock = function()
 {
 	FCK._FillEmptyBlock( FCK.EditorDocument.body.firstChild ) ;
-	var sel = FCK.EditorWindow.getSelection() ;
+	var sel = FCKSelection.GetSelection() ;
 	if ( !sel || sel.rangeCount < 1 )
 		return ;
 	var range = sel.getRangeAt( 0 );

@@ -393,9 +393,7 @@ FCKEnterKey.prototype._ExecuteEnterBlock = function( blockTag, range )
 	// Get the current selection.
 	var oRange = range || new FCKDomRange( this.Window ) ;
 
-	var oSplitInfo = oRange.SplitBlock() ;
-
-	// FCKDebug.OutputObject( oSplitInfo ) ;
+	var oSplitInfo = oRange.SplitBlock( blockTag ) ;
 
 	if ( oSplitInfo )
 	{
@@ -405,6 +403,22 @@ FCKEnterKey.prototype._ExecuteEnterBlock = function( blockTag, range )
 
 		var bIsStartOfBlock	= oSplitInfo.WasStartOfBlock ;
 		var bIsEndOfBlock	= oSplitInfo.WasEndOfBlock ;
+
+		// If there is one block under a list item, modify the split so that the list item gets split as well. (Bug #1647)
+		if ( eNextBlock )
+		{
+			if ( eNextBlock.parentNode.nodeName.IEquals( 'li' ) )
+			{
+				FCKDomTools.BreakParent( eNextBlock, eNextBlock.parentNode ) ;
+				FCKDomTools.MoveNode( eNextBlock, eNextBlock.nextSibling, true ) ;
+			}
+		}
+		else if ( ePreviousBlock && ePreviousBlock.parentNode.nodeName.IEquals( 'li' ) )
+		{
+			FCKDomTools.BreakParent( ePreviousBlock, ePreviousBlock.parentNode ) ;
+			oRange.MoveToElementEditStart( ePreviousBlock.nextSibling );
+			FCKDomTools.MoveNode( ePreviousBlock, ePreviousBlock.previousSibling ) ;
+		}
 
 		// If we have both the previous and next blocks, it means that the
 		// boundaries were on separated blocks, or none of them where on the

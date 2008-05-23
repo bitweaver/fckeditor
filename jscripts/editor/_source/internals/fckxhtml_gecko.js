@@ -24,7 +24,7 @@
 
 FCKXHtml._GetMainXmlString = function()
 {
-	return '<xhtml>' + this.MainNode.innerHTML + '</xhtml>' ;
+	return ( new XMLSerializer() ).serializeToString( this.MainNode ) ;
 }
 
 FCKXHtml._AppendAttributes = function( xmlNode, htmlNode, node )

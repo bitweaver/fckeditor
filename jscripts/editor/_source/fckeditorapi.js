@@ -40,20 +40,20 @@ function InitializeAPI()
 		// objects that aren't really FCKeditor instances.
 		var sScript =
 			'window.FCKeditorAPI = {' +
-				'Version : "2.6 Beta 1",' +
-				'VersionBuild : "18219",' +
-				'__Instances : new Object(),' +
+				'Version : "2.6",' +
+				'VersionBuild : "18638",' +
+				'Instances : new Object(),' +
 
 				'GetInstance : function( name )' +
 				'{' +
-					'return this.__Instances[ name ];' +
+					'return this.Instances[ name ];' +
 				'},' +
 
 				'_FormSubmit : function()' +
 				'{' +
-					'for ( var name in FCKeditorAPI.__Instances )' +
+					'for ( var name in FCKeditorAPI.Instances )' +
 					'{' +
-						'var oEditor = FCKeditorAPI.__Instances[ name ] ;' +
+						'var oEditor = FCKeditorAPI.Instances[ name ] ;' +
 						'if ( oEditor.GetParentForm && oEditor.GetParentForm() == this )' +
 							'oEditor.UpdateLinkedField() ;' +
 					'}' +
@@ -129,10 +129,14 @@ function InitializeAPI()
 		}
 
 		FCKeditorAPI = oParentWindow.FCKeditorAPI ;
+
+		// The __Instances properly has been changed to the public Instances,
+		// but we should still have the "deprecated" version of it.
+		FCKeditorAPI.__Instances = FCKeditorAPI.Instances ;
 	}
 
 	// Add the current instance to the FCKeditorAPI's instances collection.
-	FCKeditorAPI.__Instances[ FCK.Name ] = FCK ;
+	FCKeditorAPI.Instances[ FCK.Name ] = FCK ;
 }
 
 // Attach to the form onsubmit event and to the form.submit().
@@ -162,7 +166,7 @@ function FCKeditorAPI_Cleanup()
 {
 	if ( ! window.FCKUnloadFlag )
 		return ;
-	delete FCKeditorAPI.__Instances[ FCK.Name ] ;
+	delete FCKeditorAPI.Instances[ FCK.Name ] ;
 }
 function FCKeditorAPI_ConfirmCleanup()
 {

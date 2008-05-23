@@ -34,19 +34,32 @@ var FCKPanel = function( parentWindow )
 
 	if ( FCKBrowserInfo.IsIE )
 	{
+		// Create the Popup that will hold the panel.
+		// The popup has to be created before playing with domain hacks, see #1666.
+		this._Popup	= this._Window.createPopup() ;
+
+		// this._Window cannot be accessed while playing with domain hacks, but local variable is ok.
+		// See #1666.
+		var pDoc = this._Window.document ;
+
 		// This is a trick to IE6 (not IE7). The original domain must be set
 		// before creating the popup, so we are able to take a refence to the
 		// document inside of it, and the set the proper domain for it. (#123)
-		if ( FCK_IS_CUSTOM_DOMAIN )
+		if ( FCK_IS_CUSTOM_DOMAIN && !FCKBrowserInfo.IsIE7 )
+		{
+			pDoc.domain = FCK_ORIGINAL_DOMAIN ;
 			document.domain = FCK_ORIGINAL_DOMAIN ;
+		}
 
-		// Create the Popup that will hold the panel.
-		this._Popup	= this._Window.createPopup() ;
 		oDocument = this.Document = this._Popup.document ;
 
 		// Set the proper domain inside the popup.
 		if ( FCK_IS_CUSTOM_DOMAIN )
-			document.domain = oDocument.domain = FCK_RUNTIME_DOMAIN ;
+		{
+			oDocument.domain = FCK_RUNTIME_DOMAIN ;
+			pDoc.domain = FCK_RUNTIME_DOMAIN ;
+			document.domain = FCK_RUNTIME_DOMAIN ;
+		}
 
 		FCK.IECleanup.AddItem( this, FCKPanel_Cleanup ) ;
 	}
@@ -255,19 +268,19 @@ FCKPanel.prototype.Show = function( x, y, relElement, width, height )
 				top		: y + 'px'
 			} ) ;
 
-		var me = this ;
-		var resizeFunc = function()
-		{
-			var iWidth = eMainNode.offsetWidth || eMainNode.firstChild.offsetWidth ;
-			var iHeight = eMainNode.offsetHeight ;
-			me._IFrame.width = iWidth ;
-			me._IFrame.height = iHeight ;
+		// Move the focus to the IFRAME so we catch the "onblur".
+		this._IFrame.contentWindow.focus() ;
+		this._IsOpened = true ;
 
-			// Move the focus to the IFRAME so we catch the "onblur".
-			me._IFrame.contentWindow.focus() ;
-			me._IsOpened = true ;
-		}
-		setTimeout( resizeFunc, 1 ) ;
+		var me = this ;
+		this._resizeTimer = setTimeout( function()
+			{
+				var iWidth = eMainNode.offsetWidth || eMainNode.firstChild.offsetWidth ;
+				var iHeight = eMainNode.offsetHeight ;
+				me._IFrame.width = iWidth ;
+				me._IFrame.height = iHeight ;
+
+			}, 0 ) ;
 
 		FCK.ToolbarSet.CurrentInstance.GetInstanceObject( 'FCKPanel' )._OpenedPanel = this ;
 	}
@@ -293,6 +306,12 @@ FCKPanel.prototype.Hide = function( ignoreOnHide, ignoreFocusManagerUnlock )
 		this._IFrame.width = this._IFrame.height = 0 ;
 
 		this._IsOpened = false ;
+
+		if ( this._resizeTimer )
+		{
+			clearTimeout( this._resizeTimer ) ;
+			this._resizeTimer = null ;
+		}
 
 		if ( this.ParentPanel )
 			this.ParentPanel.Unlock() ;

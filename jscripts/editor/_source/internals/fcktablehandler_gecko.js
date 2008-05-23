@@ -25,7 +25,7 @@ FCKTableHandler.GetSelectedCells = function()
 {
 	var aCells = new Array() ;
 
-	var oSelection = FCK.EditorWindow.getSelection() ;
+	var oSelection = FCKSelection.GetSelection() ;
 
 	// If the selection is a text.
 	if ( oSelection.rangeCount == 1 && oSelection.anchorNode.nodeType == 3 )

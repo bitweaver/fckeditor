@@ -30,7 +30,7 @@ FCKSelection.GetType = function()
 	// Check if the actual selection is a Control (IMG, TABLE, HR, etc...).
 
 	var sel ;
-	try { sel = FCK.EditorWindow.getSelection() ; } catch (e) {}
+	try { sel = this.GetSelection() ; } catch (e) {}
 
 	if ( sel && sel.rangeCount == 1 )
 	{
@@ -51,7 +51,7 @@ FCKSelection.GetType = function()
 // element (object like and image or a table) is selected.
 FCKSelection.GetSelectedElement = function()
 {
-	var selection = !!FCK.EditorWindow && FCK.EditorWindow.getSelection() ;
+	var selection = !!FCK.EditorWindow && this.GetSelection() ;
 	if ( !selection || selection.rangeCount < 1 )
 		return null ;
 
@@ -72,7 +72,7 @@ FCKSelection.GetParentElement = function()
 		return FCKSelection.GetSelectedElement().parentNode ;
 	else
 	{
-		var oSel = FCK.EditorWindow.getSelection() ;
+		var oSel = this.GetSelection() ;
 		if ( oSel )
 		{
 			// make the common case fast - for collapsed/nearly collapsed selections just return anchor.parent.
@@ -117,7 +117,7 @@ FCKSelection.GetBoundaryParentElement = function( startBoundary )
 		return FCKSelection.GetSelectedElement().parentNode ;
 	else
 	{
-		var oSel = FCK.EditorWindow.getSelection() ;
+		var oSel = this.GetSelection() ;
 		if ( oSel && oSel.rangeCount > 0 )
 		{
 			var range = oSel.getRangeAt( startBoundary ? 0 : ( oSel.rangeCount - 1 ) ) ;
@@ -135,14 +135,14 @@ FCKSelection.SelectNode = function( element )
 	var oRange = FCK.EditorDocument.createRange() ;
 	oRange.selectNode( element ) ;
 
-	var oSel = FCK.EditorWindow.getSelection() ;
+	var oSel = this.GetSelection() ;
 	oSel.removeAllRanges() ;
 	oSel.addRange( oRange ) ;
 }
 
 FCKSelection.Collapse = function( toStart )
 {
-	var oSel = FCK.EditorWindow.getSelection() ;
+	var oSel = this.GetSelection() ;
 
 	if ( toStart == null || toStart === true )
 		oSel.collapseToStart() ;
@@ -156,7 +156,7 @@ FCKSelection.HasAncestorNode = function( nodeTagName )
 	var oContainer = this.GetSelectedElement() ;
 	if ( ! oContainer && FCK.EditorWindow )
 	{
-		try		{ oContainer = FCK.EditorWindow.getSelection().getRangeAt(0).startContainer ; }
+		try		{ oContainer = this.GetSelection().getRangeAt(0).startContainer ; }
 		catch(e){}
 	}
 
@@ -176,7 +176,7 @@ FCKSelection.MoveToAncestorNode = function( nodeTagName )
 
 	var oContainer = this.GetSelectedElement() ;
 	if ( ! oContainer )
-		oContainer = FCK.EditorWindow.getSelection().getRangeAt(0).startContainer ;
+		oContainer = this.GetSelection().getRangeAt(0).startContainer ;
 
 	while ( oContainer )
 	{
@@ -191,7 +191,7 @@ FCKSelection.MoveToAncestorNode = function( nodeTagName )
 FCKSelection.Delete = function()
 {
 	// Gets the actual selection.
-	var oSel = FCK.EditorWindow.getSelection() ;
+	var oSel = this.GetSelection() ;
 
 	// Deletes the actual selection contents.
 	for ( var i = 0 ; i < oSel.rangeCount ; i++ )
@@ -201,3 +201,20 @@ FCKSelection.Delete = function()
 
 	return oSel ;
 }
+
+/**
+ * Returns the native selection object.
+ */
+FCKSelection.GetSelection = function()
+{
+	return FCK.EditorWindow.getSelection() ;
+}
+
+// The following are IE only features (we don't need then in other browsers
+// currently).
+FCKSelection.Save = function()
+{}
+FCKSelection.Restore = function()
+{}
+FCKSelection.Release = function()
+{}

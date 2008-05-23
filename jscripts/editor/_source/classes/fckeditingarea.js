@@ -91,12 +91,16 @@ FCKEditingArea.prototype.Start = function( html, secondCall )
 		// Create the editing area IFRAME.
 		var oIFrame = this.IFrame = oTargetDocument.createElement( 'iframe' ) ;
 
+		// IE: Avoid JavaScript errors thrown by the editing are source (like tags events).
+		// See #1055.
+		var sOverrideError = '<script type="text/javascript" _fcktemp="true">window.onerror=function(){return true;};</script>' ;
+
 		oIFrame.frameBorder = 0 ;
 		oIFrame.width = oIFrame.height = '100%' ;
 
 		if ( FCK_IS_CUSTOM_DOMAIN && FCKBrowserInfo.IsIE )
 		{
-			window._FCKHtmlToLoad = html ;
+			window._FCKHtmlToLoad = sOverrideError + html ;
 			oIFrame.src = 'javascript:void( (function(){' +
 				'document.open() ;' +
 				'document.domain="' + document.domain + '" ;' +
@@ -128,7 +132,7 @@ FCKEditingArea.prototype.Start = function( html, secondCall )
 			var oDoc = this.Window.document ;
 
 			oDoc.open() ;
-			oDoc.write( html ) ;
+			oDoc.write( sOverrideError + html ) ;
 			oDoc.close() ;
 		}
 
@@ -295,16 +299,10 @@ FCKEditingArea.prototype.Focus = function()
 	{
 		if ( this.Mode == FCK_EDITMODE_WYSIWYG )
 		{
-			// The following check is important to avoid IE entering in a focus loop. Ref:
-			// http://sourceforge.net/tracker/index.php?func=detail&aid=1567060&group_id=75348&atid=543653
-			if ( FCKBrowserInfo.IsIE && this.Document.hasFocus() )
-				this._EnsureFocusIE() ;
-
-			this.Window.focus() ;
-
-			// In IE it can happen that the document is in theory focused but the active element is outside it
 			if ( FCKBrowserInfo.IsIE )
-				this._EnsureFocusIE() ;
+				this._FocusIE() ;
+			else
+				this.Window.focus() ;
 		}
 		else
 		{
@@ -318,10 +316,13 @@ FCKEditingArea.prototype.Focus = function()
 	catch(e) {}
 }
 
-FCKEditingArea.prototype._EnsureFocusIE = function()
+FCKEditingArea.prototype._FocusIE = function()
 {
-	// In IE it can happen that the document is in theory focused but the active element is outside it
+	// In IE it can happen that the document is in theory focused but the
+	// active element is outside of it.
 	this.Document.body.setActive() ;
+
+	this.Window.focus() ;
 
 	// Kludge for #141... yet more code to workaround IE bugs
 	var range = this.Document.selection.createRange() ;
@@ -337,14 +338,11 @@ FCKEditingArea.prototype._EnsureFocusIE = function()
 		return ;
 	}
 
-	range.moveEnd( "character", 1 ) ;
-	range.select() ;
-
-	if ( range.boundingWidth > 0 )
-	{
-		range.moveEnd( "character", -1 ) ;
-		range.select() ;
-	}
+	// Force the selection to happen, in this way we guarantee the focus will
+	// be there.
+	range = new FCKDomRange( this.Window ) ;
+	range.MoveToElementEditStart( parentNode ) ;
+	range.Select() ;
 }
 
 function FCKEditingArea_Cleanup()

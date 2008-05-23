@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2008 Frederico Caldeira Knabben
  *
@@ -125,6 +125,7 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 67 /*C*/, true ],
 	[ CTRL + 70 /*F*/, true ],
 	[ CTRL + 83 /*S*/, true ],
+	[ CTRL + 84 /*T*/, true ],
 	[ CTRL + 88 /*X*/, true ],
 	[ CTRL + 86 /*V*/, 'Paste' ],
 	[ SHIFT + 45 /*INS*/, 'Paste' ],
@@ -138,8 +139,7 @@ FCKConfig.Keystrokes = [
 	[ CTRL + 73 /*I*/, 'Italic' ],
 	[ CTRL + 85 /*U*/, 'Underline' ],
 	[ CTRL + SHIFT + 83 /*S*/, 'Save' ],
-	[ CTRL + ALT + 13 /*ENTER*/, 'FitWindow' ],
-	[ CTRL + 9 /*TAB*/, 'Source' ]
+	[ CTRL + ALT + 13 /*ENTER*/, 'FitWindow' ]
 ] ;
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','Table','Form'] ;
@@ -204,8 +204,8 @@ FCKConfig.CustomStyles =
 FCKConfig.CoreStyles =
 {
 	// Basic Inline Styles.
-	'Bold'			: { Element : 'b', Overrides : 'strong' },
-	'Italic'		: { Element : 'i', Overrides : 'em' },
+	'Bold'			: { Element : 'strong', Overrides : 'b' },
+	'Italic'		: { Element : 'em', Overrides : 'i' },
 	'Underline'		: { Element : 'u' },
 	'StrikeThrough'	: { Element : 'strike' },
 	'Subscript'		: { Element : 'sub' },

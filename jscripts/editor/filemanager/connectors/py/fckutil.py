@@ -61,8 +61,8 @@ def getFileName(filename):
 
 def sanitizeFolderName( newFolderName ):
 	"Do a cleanup of the folder name to avoid possible problems"
-	# Remove . \ / | : ? *
-	return re.sub( '\\.|\\\\|\\/|\\||\\:|\\?|\\*', '_', newFolderName )
+	# Remove . \ / | : ? * " < > and control characters
+	return re.sub( '(?u)\\.|\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[^\u0000-\u001f\u007f-\u009f]', '_', newFolderName )
 
 def sanitizeFileName( newFileName ):
 	"Do a cleanup of the file name to avoid possible problems"
@@ -72,7 +72,7 @@ def sanitizeFileName( newFileName ):
 	newFileName = newFileName.replace('\\','/')		# convert windows to unix path
 	newFileName = os.path.basename (newFileName)	# strip directories
 	# Remove \ / | : ? *
-	return re.sub ( '/\\\\|\\/|\\||\\:|\\?|\\*/', '_', newFileName )
+	return re.sub ( '(?u)/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[^\u0000-\u001f\u007f-\u009f]/', '_', newFileName )
 
 def getCurrentFolder(currentFolder):
 	if not currentFolder:
@@ -89,7 +89,7 @@ def getCurrentFolder(currentFolder):
 		currentFolder = currentFolder.replace('//','/')
 
 	# Check for invalid folder paths (..)
-	if '..' in currentFolder:
+	if '..' in currentFolder or '\\' in currentFolder:
 		return None
 
 	return currentFolder

@@ -150,9 +150,9 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 
 function GetRootPath()
 {
-    if (!isset($_SERVER)) {
-        global $_SERVER;
-    }
+	if (!isset($_SERVER)) {
+		global $_SERVER;
+	}
 	$sRealPath = realpath( './' ) ;
 
 	$sSelfPath = $_SERVER['PHP_SELF'] ;
@@ -223,14 +223,16 @@ function IsAllowedCommand( $sCommand )
 
 function GetCurrentFolder()
 {
-    if (!isset($_GET)) {
-        global $_GET;
-    }
+	if (!isset($_GET)) {
+		global $_GET;
+	}
 	$sCurrentFolder	= isset( $_GET['CurrentFolder'] ) ? $_GET['CurrentFolder'] : '/' ;
 
 	// Check the current folder syntax (must begin and start with a slash).
-	if ( ! ereg( '/$', $sCurrentFolder ) ) $sCurrentFolder .= '/' ;
-	if ( strpos( $sCurrentFolder, '/' ) !== 0 ) $sCurrentFolder = '/' . $sCurrentFolder ;
+	if ( !preg_match( '|/$|', $sCurrentFolder ) )
+		$sCurrentFolder .= '/' ;
+	if ( strpos( $sCurrentFolder, '/' ) !== 0 )
+		$sCurrentFolder = '/' . $sCurrentFolder ;
 
 	// Ensure the folder path has no double-slashes
 	while ( strpos ($sCurrentFolder, '//') !== false ) {
@@ -238,7 +240,7 @@ function GetCurrentFolder()
 	}
 
 	// Check for invalid folder paths (..)
-	if ( strpos( $sCurrentFolder, '..' ) )
+	if ( strpos( $sCurrentFolder, '..' ) || strpos( $sCurrentFolder, "\\" ))
 		SendError( 102, '' ) ;
 
 	return $sCurrentFolder ;
@@ -250,7 +252,7 @@ function SanitizeFolderName( $sNewFolderName )
 	$sNewFolderName = stripslashes( $sNewFolderName ) ;
 
 	// Remove . \ / | : ? * " < >
-	$sNewFolderName = preg_replace( '/\\.|\\\\|\\/|\\||\\:|\\?|\\*|"|<|>/', '_', $sNewFolderName ) ;
+	$sNewFolderName = preg_replace( '/\\.|\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFolderName ) ;
 
 	return $sNewFolderName ;
 }
@@ -267,7 +269,7 @@ function SanitizeFileName( $sNewFileName )
 		$sNewFileName = preg_replace( '/\\.(?![^.]*$)/', '_', $sNewFileName ) ;
 
 	// Remove \ / | : ? * " < >
-	$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>/', '_', $sNewFileName ) ;
+	$sNewFileName = preg_replace( '/\\\\|\\/|\\||\\:|\\?|\\*|"|<|>|[[:cntrl:]]/', '_', $sNewFileName ) ;
 
 	return $sNewFileName ;
 }
@@ -275,7 +277,40 @@ function SanitizeFileName( $sNewFileName )
 // This is the function that sends the results of the uploading process.
 function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $customMsg = '' )
 {
-	echo '<script type="text/javascript">' ;
+	echo <<<EOF
+<script type="text/javascript">
+(function()
+{
+	var d = document.domain ;
+
+	while ( true )
+	{
+		// Test if we can access a parent property.
+		try
+		{
+			var test = window.top.opener.document.domain ;
+			break ;
+		}
+		catch( e ) {}
+
+		// Remove a domain part: www.mytest.example.com => mytest.example.com => example.com ...
+		d = d.replace( /.*?(?:\.|$)/, '' ) ;
+
+		if ( d.length == 0 )
+			break ;		// It was not able to detect the domain.
+
+		try
+		{
+			document.domain = d ;
+		}
+		catch (e)
+		{
+			break ;
+		}
+	}
+})() ;
+
+EOF;
 	$rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
 	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
 	echo '</script>' ;

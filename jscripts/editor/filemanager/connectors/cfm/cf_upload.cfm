@@ -33,6 +33,12 @@
 <cfinclude template="cf_io.cfm">
 <cfinclude template="cf_commands.cfm">
 
+<cffunction name="SendError" returntype="void" output="true">
+	<cfargument name="number" required="true" type="Numeric">
+	<cfargument name="text" required="true">
+	<cfreturn SendUploadResults( "#ARGUMENTS.number#", "", "", "ARGUMENTS.text" )>
+</cffunction>
+
 <cfset REQUEST.Config = Config>
 <cfif find( "/", getBaseTemplatePath() ) >
 	<cfset REQUEST.Fs = "/">

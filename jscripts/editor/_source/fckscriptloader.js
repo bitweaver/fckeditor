@@ -40,6 +40,8 @@ FCKScriptLoader.Load = function( scriptName )
 	if ( scriptName in FCKScriptLoader._LoadedScripts )
 		return ;
 
+	FCKScriptLoader._LoadedScripts[ scriptName ] = true ;
+
 	var oScriptInfo = this._Scripts[ scriptName ] ;
 
 	if ( !oScriptInfo )
@@ -65,8 +67,6 @@ FCKScriptLoader.Load = function( scriptName )
 		else
 			this._LoadScript( sBaseScriptName + '_gecko.js' ) ;
 	}
-
-	FCKScriptLoader._LoadedScripts[ scriptName ] = true ;
 }
 
 FCKScriptLoader._LoadScript = function( scriptPathFromSource )
@@ -110,7 +110,7 @@ FCKScriptLoader.AddScript( 'FCKBrowserInfo'		, 'internals/'	, ['FCKJSCoreExtensi
 FCKScriptLoader.AddScript( 'FCKCodeFormatter'	, 'internals/' ) ;
 FCKScriptLoader.AddScript( 'FCKConfig'			, 'internals/'	, ['FCKBrowserInfo','FCKConstants'] ) ;
 FCKScriptLoader.AddScript( 'FCKDebug'			, 'internals/'	, ['FCKConfig'] ) ;
-FCKScriptLoader.AddScript( 'FCKDomTools'		, 'internals/'	, ['FCKJSCoreExtensions','FCKBrowserInfo','FCKTools'], FCK_GENERIC ) ;
+FCKScriptLoader.AddScript( 'FCKDomTools'		, 'internals/'	, ['FCKJSCoreExtensions','FCKBrowserInfo','FCKTools','FCKDomRange'], FCK_GENERIC ) ;
 FCKScriptLoader.AddScript( 'FCKListsLib'		, 'internals/' ) ;
 FCKScriptLoader.AddScript( 'FCKListHandler'		, 'internals/'	, ['FCKConfig', 'FCKDocumentFragment', 'FCKJSCoreExtensions','FCKDomTools'], FCK_GENERIC ) ;
 FCKScriptLoader.AddScript( 'FCKRegexLib'		, 'internals/' ) ;

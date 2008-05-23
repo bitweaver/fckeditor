@@ -363,7 +363,7 @@ var FCK =
 
 		// IE doesn't support <abbr> and it breaks it. Let's protect it.
 		if ( FCKBrowserInfo.IsIE )
-			sTags += sTags.length > 0 ? '|ABBR|XML|EMBED' : 'ABBR|XML|EMBED' ;
+			sTags += sTags.length > 0 ? '|ABBR|XML|EMBED|OBJECT' : 'ABBR|XML|EMBED|OBJECT' ;
 
 		var oRegex ;
 		if ( sTags.length > 0 )
@@ -399,7 +399,7 @@ var FCK =
 		// If there was an onSelectionChange listener in IE we must remove it to avoid crashes #1498
 		if ( FCKBrowserInfo.IsIE && FCK.EditorDocument )
 		{
-				FCK.EditorDocument.detachEvent("onselectionchange", Doc_OnSelectionChange ) ;
+			FCK.EditorDocument.detachEvent("onselectionchange", Doc_OnSelectionChange ) ;
 		}
 
 		if ( FCK.EditMode == FCK_EDITMODE_WYSIWYG )
@@ -658,6 +658,8 @@ var FCK =
 
 		var elementName = element.nodeName.toLowerCase() ;
 
+		FCKSelection.Restore() ;
+
 		// Create a range for the selection. V3 will have a new selection
 		// object that may internally supply this feature.
 		var range = new FCKDomRange( this.EditorWindow ) ;
@@ -667,7 +669,7 @@ var FCK =
 			range.SplitBlock() ;
 			range.InsertNode( element ) ;
 
-			var next = FCKDomTools.GetNextSourceElement( element, false, null, [ 'hr','br','param','img','area','input' ] ) ;
+			var next = FCKDomTools.GetNextSourceElement( element, false, null, [ 'hr','br','param','img','area','input' ], true ) ;
 
 			// Be sure that we have something after the new element, so we can move the cursor there.
 			if ( !next && FCKConfig.EnterMode != 'br')
@@ -861,7 +863,7 @@ function _FCK_PaddingNodeListener()
 	{
 		// Prevent the caret from going between the body and the padding node in Firefox.
 		// i.e. <body>|<p></p></body>
-		var sel = FCK.EditorWindow.getSelection() ;
+		var sel = FCKSelection.GetSelection() ;
 		if ( sel && sel.rangeCount == 1 )
 		{
 			var range = sel.getRangeAt( 0 ) ;
@@ -1143,8 +1145,22 @@ function FCKFocusManager_FireOnBlur()
 
 function FCKFocusManager_Win_OnFocus_Area()
 {
+	// Check if we are already focusing the editor (to avoid loops).
+	if ( FCKFocusManager._IsFocusing )
+		return ;
+
+	FCKFocusManager._IsFocusing = true ;
+
 	FCK.Focus() ;
 	FCKFocusManager_Win_OnFocus() ;
+
+	// The above FCK.Focus() call may trigger other focus related functions.
+	// So, to avoid a loop, we delay the focusing mark removal, so it get
+	// executed after all othre functions have been run.
+	FCKTools.RunFunction( function()
+		{
+			delete FCKFocusManager._IsFocusing ;
+		} ) ;
 }
 
 function FCKFocusManager_Win_OnFocus()

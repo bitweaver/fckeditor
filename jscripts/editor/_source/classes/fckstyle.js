@@ -278,13 +278,15 @@ FCKStyle.prototype =
 
 			if ( updateRange )
 				range.MoveToBookmark( bookmark ) ;
+
+			return ;
 		}
 
 		// Expand the range, if inside inline element boundaries.
 		range.Expand( 'inline_elements' ) ;
 
 		// Bookmark the range so we can re-select it after processing.
-		var bookmark = range.CreateBookmark( true ) ;
+		bookmark = range.CreateBookmark( true ) ;
 
 		// The style will be applied within the bookmark boundaries.
 		var startNode	= range.GetBookmarkNode( bookmark, true ) ;
@@ -855,6 +857,9 @@ FCKStyle.prototype =
 		var block ;
 		var doc = range.Window.document ;
 
+		var preBlocks = [] ;
+		var convertedPreBlocks = [] ;
+
 		while( ( block = iterator.GetNextParagraph() ) )		// Only one =
 		{
 			// Create the new node right before the current one.
@@ -864,15 +869,63 @@ FCKStyle.prototype =
 			var newBlockIsPre = newBlock.nodeName.IEquals( 'pre' ) ;
 			var blockIsPre = block.nodeName.IEquals( 'pre' ) ;
 			if ( newBlockIsPre && !blockIsPre )
+			{
 				newBlock = this._ToPre( doc, block, newBlock ) ;
+				preBlocks.push( newBlock ) ;
+			}
 			else if ( !newBlockIsPre && blockIsPre )
+			{
 				newBlock = this._FromPre( doc, block, newBlock ) ;
+				convertedPreBlocks.push( newBlock ) ;
+			}
 			else	// Convering from a regular block to another regular block.
 				FCKDomTools.MoveChildren( block, newBlock ) ;
 
 			// Replace the current block.
 			block.parentNode.insertBefore( newBlock, block ) ;
 			FCKDomTools.RemoveNode( block ) ;
+		}
+
+		// Merge adjacent <PRE> blocks for #1229.
+		for ( var i = 0 ; i < preBlocks.length - 1 ; i++ )
+		{
+			// Check if the next block in HTML equals the next <PRE> block generated.
+			if ( FCKDomTools.GetNextSourceElement( preBlocks[i], true, [], [], true ) != preBlocks[i+1] )
+				continue ;
+
+			// Merge the upper <PRE> block's content into the lower <PRE> block.
+			// Remove the upper <PRE> block.
+			preBlocks[i+1].innerHTML = preBlocks[i].innerHTML + '\n\n' + preBlocks[i+1].innerHTML ;
+			FCKDomTools.RemoveNode( preBlocks[i] ) ;
+		}
+
+		// Split converted <PRE> blocks for #1229.
+		for ( var i = 0 ; i < convertedPreBlocks.length ; i++ )
+		{
+			var currentBlock = convertedPreBlocks[i] ;
+			var lastNewBlock = null ;
+			for ( var j = 0 ; j < currentBlock.childNodes.length ; j++ )
+			{
+				var cursor = currentBlock.childNodes[j] ;
+
+				// If we have two <BR>s, and they're not at the beginning or the end,
+				// then we'll split up the contents following them into another block.
+				if ( cursor.nodeName.IEquals( 'br' ) && j != 0 && j != currentBlock.childNodes.length - 2
+						&& cursor.nextSibling && cursor.nextSibling.nodeName.IEquals( 'br' ) )
+				{
+					FCKDomTools.RemoveNode( cursor.nextSibling ) ;
+					FCKDomTools.RemoveNode( cursor ) ;
+					j-- ;	// restart at current index at next iteration
+					lastNewBlock = FCKDomTools.InsertAfterNode( lastNewBlock || currentBlock, doc.createElement( currentBlock.nodeName ) ) ;
+					continue ;
+				}
+
+				if ( lastNewBlock )
+				{
+					FCKDomTools.MoveNode( cursor, lastNewBlock ) ;
+					j-- ;	// restart at current index at next iteration
+				}
+			}
 		}
 
 		// Re-select the original range.

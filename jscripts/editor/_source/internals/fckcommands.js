@@ -55,7 +55,7 @@ FCKCommands.GetCommand = function( commandName )
 		case 'AnchorDelete'	: oCommand = new FCKAnchorDeleteCommand() ; break ;
 		case 'BulletedList'	: oCommand = new FCKDialogCommand( 'BulletedList', FCKLang.BulletedListProp		, 'dialog/fck_listprop.html?UL'	, 370, 160 ) ; break ;
 		case 'NumberedList'	: oCommand = new FCKDialogCommand( 'NumberedList', FCKLang.NumberedListProp		, 'dialog/fck_listprop.html?OL'	, 370, 160 ) ; break ;
-		case 'About'		: oCommand = new FCKDialogCommand( 'About'		, FCKLang.About					, 'dialog/fck_about.html'		, 400, 310, function(){ return FCK_TRISTATE_OFF ; } ) ; break ;
+		case 'About'		: oCommand = new FCKDialogCommand( 'About'		, FCKLang.About					, 'dialog/fck_about.html'		, 420, 330, function(){ return FCK_TRISTATE_OFF ; } ) ; break ;
 		case 'Find'			: oCommand = new FCKDialogCommand( 'Find'		, FCKLang.DlgFindAndReplaceTitle, 'dialog/fck_replace.html'		, 340, 230, null, null, 'Find' ) ; break ;
 		case 'Replace'		: oCommand = new FCKDialogCommand( 'Replace'	, FCKLang.DlgFindAndReplaceTitle, 'dialog/fck_replace.html'		, 340, 230, null, null, 'Replace' ) ; break ;
 

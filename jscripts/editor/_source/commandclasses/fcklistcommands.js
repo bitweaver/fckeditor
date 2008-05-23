@@ -145,7 +145,7 @@ FCKListCommand.prototype =
 				if ( rangeQueue == null )
 				{
 					rangeQueue = [] ;
-					var selectionObject = FCK.EditorWindow.getSelection() ;
+					var selectionObject = FCKSelection.GetSelection() ;
 					if ( selectionObject && listGroups.length == 0 )
 						rangeQueue.push( selectionObject.getRangeAt( 0 ) ) ;
 					for ( var i = 1 ; selectionObject && i < selectionObject.rangeCount ; i++ )

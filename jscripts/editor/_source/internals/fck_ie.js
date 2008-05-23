@@ -93,7 +93,7 @@ function Doc_OnDblClick()
 function Doc_OnSelectionChange()
 {
 	// Don't fire the event if no document is loaded.
-	if ( FCK.EditorDocument )
+	if ( !FCK.IsSelectionChangeLocked && FCK.EditorDocument )
 		FCK.Events.FireEvent( "OnSelectionChange" ) ;
 }
 
@@ -155,7 +155,7 @@ FCK.InsertHtml = function( html )
 	FCKUndo.SaveUndoStep() ;
 
 	// Gets the actual selection.
-	var oSel = FCK.EditorDocument.selection ;
+	var oSel = FCKSelection.GetSelection() ;
 
 	// Deletes the actual selection contents.
 	if ( oSel.type.toLowerCase() == 'control' )

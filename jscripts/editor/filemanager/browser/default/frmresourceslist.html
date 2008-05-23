@@ -24,6 +24,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link href="browser.css" type="text/css" rel="stylesheet" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 
@@ -87,7 +88,7 @@ function OpenFolder( folderPath )
 
 function OpenFile( fileUrl )
 {
-	window.top.opener.SetUrl( encodeURI( fileUrl ) ) ;
+	window.top.opener.SetUrl( encodeURI( fileUrl ).replace( '#', '%23' ) ) ;
 	window.top.close() ;
 	window.top.opener.focus() ;
 }

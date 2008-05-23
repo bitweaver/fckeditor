@@ -45,7 +45,7 @@ FCKTools.FixCssUrls = function( urlFixPrefix, cssStyles )
 
 	return cssStyles.replace( /url\s*\(([\s'"]*)(.*?)([\s"']*)\)/g, function( match, opener, path, closer )
 		{
-			if ( /^\/|^\w?:/.test() )
+			if ( /^\/|^\w?:/.test( path ) )
 				return match ;
 			else
 				return 'url(' + opener + urlFixPrefix + path + closer + ')' ;
@@ -129,7 +129,7 @@ FCKTools.GetStyleHtml = (function()
 			if ( /[\\\/\.]\w*$/.test( cssFileOrArrayOrDef ) )
 			{
 				// The string may have several URLs separated by comma.
-				return this.GetStyleHtml( cssFileOrArrayOrDef.split(',') ) ;
+				return this.GetStyleHtml( cssFileOrArrayOrDef.split(','), markTemp ) ;
 			}
 			else
 				return getStyle( this._GetUrlFixedCss( cssFileOrArrayOrDef ), markTemp ) ;

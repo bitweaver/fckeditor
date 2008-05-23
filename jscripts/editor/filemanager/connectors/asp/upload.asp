@@ -32,6 +32,10 @@ Response.Buffer = True
 <!--#include file="class_upload.asp"-->
 <%
 
+Sub SendError( number, text )
+	SendUploadResults number, "", "", text
+End Sub
+
 ' Check if this uploader has been enabled.
 If ( ConfigIsEnabled = False ) Then
 	SendUploadResults "1", "", "", "This file uploader is disabled. Please check the ""editor/filemanager/connectors/asp/config.asp"" file"
