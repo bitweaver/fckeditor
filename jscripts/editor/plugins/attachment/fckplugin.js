@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Attachment plugin for FCKeditor for Bitweaver CMS
  * Copyright (C) 2007 Will James, Bitweaver.org
  * 
@@ -130,15 +130,17 @@ FCKAttachment.prototype.Redraw = function(){
 	}else{
 		// Walk the body DOM tree and grab all nodes that have an attachment tag in them
 		// FCKAttachment._AcceptNode
-		var oInteractor = FCK.EditorDocument.createTreeWalker( FCK.EditorDocument.body, NodeFilter.SHOW_TEXT, FCKAttachment._AcceptNode, true ) ;
-		this.aNodes = new Array() ;
-		while ( oNode = oInteractor.nextNode() ){
-			this.aNodes[ this.aNodes.length ] = oNode ;
-		}
-		for ( var n = 0 ; n < this.aNodes.length ; n++ ){	
-			// process nodes
-			this.ProcessNode(n);
-			this.VerifyAttachmentData(n);
+		if ( FCK.EditorDocument  ){
+			var oInteractor = FCK.EditorDocument.createTreeWalker( FCK.EditorDocument.body, NodeFilter.SHOW_TEXT, FCKAttachment._AcceptNode, true ) ;
+			this.aNodes = new Array() ;
+			while ( oNode = oInteractor.nextNode() ){
+				this.aNodes[ this.aNodes.length ] = oNode ;
+			}
+			for ( var n = 0 ; n < this.aNodes.length ; n++ ){	
+				// process nodes
+				this.ProcessNode(n);
+				this.VerifyAttachmentData(n);
+			}
 		}
 	}
 }
