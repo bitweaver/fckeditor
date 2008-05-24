@@ -1,21 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
  * For further information visit:
- * 		http://www.fckeditor.net/
+ * 		http://www.bitweaver.org//
  * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: fck_attachment.html
+ * File Name: fck_attachment.tpl
  * 	Attachment Plugin.
  * 
  * File Authors:
- * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ * 		Will James for Tekimaki (will@@tekimaki.com)
 -->
 <html>
 	<head>
@@ -65,6 +57,18 @@
 				
 				// Show the "Ok" button.
 				window.parent.SetOkButton( true ) ;	
+
+				// Cherry pick the content id and content guid type from the content editing form 
+				forms =  window.parent.parent.document.forms;
+				for( n=0; n<forms.length; n++ ){
+					if ( !MochiKit.Base.isUndefinedOrNull( forms[n].content_id ) ){
+						document.uploadform.content_id.value = forms[n].content_id.value;
+						break;
+					}
+				}
+				if ( !MochiKit.Base.isUndefinedOrNull( window.parent.parent.LibertyContent.CONTENT_TYPE_GUID ) ){
+					document.uploadform.content_type_guid.value = window.parent.parent.LibertyContent.CONTENT_TYPE_GUID;
+				}
 			}
 			
 			function Ok(){
@@ -103,22 +107,14 @@
 		</div>
 		<div id="divUpload" style="display: none">
 			<fieldset>
-				Size&nbsp;
-				<select id="attachSize" onchange="fck_set_attachment_size(this);">
-					<option value="avatar">Tiny</option>
-					<option value="small">Small</option>
-					<option value="medium" selected="true">Medium</option>
-					<option value="large">Large</option>
-					<option value="original">Original</option>
-				</select>
-
 				<legend>Attachments</legend>
 				<div class="row">
-					<form action="" enctype="multipart/form-data" id="editpageform" method="post" >
+					<form action="" enctype="multipart/form-data" name="uploadform" method="post" >
 						<div class="formlabel">Upload File</div>
 						<div class="forminput">
 							<input type="file" name="upload" size="40" id="upload" onchange="liberty_uploader(this, 'fck_attachment_uploader.php','Please wait for the current upload to finish.', 'liberty_upload_frame', 'liberty_upload_action');" />
 							<input type="hidden" name="content_id" value="" />
+							<input type="hidden" name="content_type_guid" value="" />
 							<input type="hidden" name="liberty_upload_action" value="" id="liberty_upload_action" />	
 							<iframe src="about:blank" id="liberty_upload_frame" name="liberty_upload_frame" onload="liberty_uploader_complete('liberty_upload_frame', 'edit_storage_list_div', 'upload');" style="position: absolute; left: -10000px;">
 								<div class="warning">iFrame support is required for AJAX uploads.&nbsp;You must save the content to upload an attachment.</div>
@@ -128,6 +124,15 @@
 					</form>
 				</div>
 				
+				Insert Size&nbsp;
+				<select id="attachSize" onchange="fck_set_attachment_size(this);">
+					<option value="avatar">Tiny</option>
+					<option value="small">Small</option>
+					<option value="medium" selected="true">Medium</option>
+					<option value="large">Large</option>
+					<option value="original">Original</option>
+				</select>
+
 				<div id="edit_storage_list_div"></div>	
 				
 				<div id="pagination">
