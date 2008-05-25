@@ -107,7 +107,7 @@ FCKAttachment.prototype.SetupImg = function( img, obj, size )
 	// attach the selected size
 	img._fck_attachment_size = size;
 
-	img._fck_attachment = '{attachment id=' + obj.id + ' size=' + size + '}' ;
+	img._fck_attachment = '{attachment id=' + obj.id + ' size=' + size + '}';
 	
 	img.contentEditable = false;
 

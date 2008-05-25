@@ -70,18 +70,6 @@
 					document.uploadform.content_type_guid.value = window.parent.parent.LibertyContent.CONTENT_TYPE_GUID;
 				}
 			}
-			
-			function Ok(){
-				if ( imgType != 'attachment'){
-					var url = document.getElementById('imgUrl').value;
-					var alt = document.getElementById('imgAlt').value;
-					var w = document.getElementById('imgW').value;
-					var h = document.getElementById('imgH').value;
-					
-					FCKAttachment.AddImgByURL( url, alt, w, h );
-				}
-				return true;
-			}
 		</script>
 	</head>
 	<body scroll="no" style="overflow: hidden">

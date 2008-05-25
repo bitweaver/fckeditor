@@ -117,5 +117,5 @@ function fck_attach_by_id( id ){
 	}
 	
 	FCKAttachment.AddAttachment( obj, fck_attachment_size );
-	parent.Ok();
+	parent.Cancel();
 }
