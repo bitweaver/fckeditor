@@ -63,22 +63,6 @@ function ajax_error( request ) {
 	MochiKit.Style.hideElement('spinner');
 }
 
-//what do I need this for? -wjames5
-/*
-function ajax_get_and_call(element, func, url, force) {
-	if (!force && element.loadedResponse) {
-		func(element.loadedResponse);
-	} else {
-		var myAjax = loadJSONDoc(url);
-		myAjax.addCallbacks(function(transport){
-			element.loadedResponse = transport.responseText || "No Response.";
-			func(element.loadedResponse);
-		    }, 
-		 ajax_error);
-	}
-}
-*/
-
 function ajax_result_handler(rslt){
 	MochiKit.Style.hideElement('spinner');
 	if (rslt.Status.code == 200){
@@ -133,6 +117,5 @@ function fck_attach_by_id( id ){
 	}
 	
 	FCKAttachment.AddAttachment( obj, fck_attachment_size );
-	imgType = 'attachment';
 	parent.Ok();
 }
