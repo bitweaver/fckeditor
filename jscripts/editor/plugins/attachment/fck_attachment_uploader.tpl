@@ -1,14 +1,9 @@
-{strip}
 <html>
 <head>
-{include file="bitpackage:kernel/header_inc.tpl"}
 <script type="text/javascript">
 {if !empty($errors)}
-	function display_upload_errors() {ldelim}
-		alert("Error with upload: {$errors}");
-	{rdelim}
-	addLoadHook(display_upload_errors);
-{else if} 
+	alert("Erasdror with upload: {$errors}");
+{else} 
 	function getRslt(){ldelim}	
 		var rslt = {ldelim}
 		{if count($gContent->mStorage) > 0}
@@ -49,4 +44,3 @@
 {/if}
 </body>
 </html>
-{/strip}
