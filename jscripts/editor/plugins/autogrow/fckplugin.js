@@ -46,18 +46,25 @@ function FCKAutoGrow_Check()
 	if ( iDiff != 0 )
 	{
 		var iMainFrameSize = window.frameElement.offsetHeight ;
+		var FrameMax = FCKAutoGrow_GetFrameMax() ;
 
-		if ( iDiff > 0 && iMainFrameSize < FCKConfig.AutoGrowMax )
+		if ( iDiff > 0 && iMainFrameSize < FrameMax )
 		{
 			iMainFrameSize += iDiff ;
-			if ( iMainFrameSize > FCKConfig.AutoGrowMax )
-				iMainFrameSize = FCKConfig.AutoGrowMax ;
+			if ( iMainFrameSize > FrameMax )
+				iMainFrameSize = FrameMax ;
+		}
+		// resizing buggyness of the inner frame sometimes returns a possitive iDiff when it should be negative, handle it
+		else if ( iDiff > 0 && iMainFrameSize > FrameMax ){
+			iMainFrameSize = FrameMax ;
 		}
 		else if ( iDiff < 0 && iMainFrameSize > FCKAutoGrow_Min )
 		{
 			iMainFrameSize += iDiff ;
 			if ( iMainFrameSize < FCKAutoGrow_Min )
 				iMainFrameSize = FCKAutoGrow_Min ;
+			else if ( iMainFrameSize > FrameMax )
+				iMainFrameSize = FrameMax ;
 		}
 		else
 			return ;
@@ -70,6 +77,14 @@ function FCKAutoGrow_Check()
 		// forcibly trigger onresize. #1336
 		if ( typeof window.onresize == 'function' )
 			window.onresize() ;
+	}
+}
+
+function FCKAutoGrow_GetFrameMax(){
+	if ( typeof( FCKConfig.AutoGrowMax ) == "number" ){
+		return FCKConfig.AutoGrowMax;
+	}else{
+		return FCKTools.GetViewPaneSize( window.parent ).Height;
 	}
 }
 
