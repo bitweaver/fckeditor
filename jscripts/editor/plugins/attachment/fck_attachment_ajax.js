@@ -85,7 +85,15 @@ function process_rslt_data( data ){
 		fck_attachment_data.push( data[n] );
 	}
 	row_display = function (row) {
-		return TR(null, TD(null, IMG({'src':row.avatar})), TD(null, row.file_name, BR(), A({'href':'javascript:void(0);', 'style':'font-weight:bold;', 'onclick':'fck_attach_by_id('+row.id+')'}, 'Click to Insert' )) );
+		var oLink;
+		if ( /^image\/*/.test(row.mime_type) ){
+			oLink = A({'href':'javascript:void(0);', 'style':'font-weight:bold;', 'onclick':'fck_attach_by_id('+row.id+')'}, 'Click to Insert Image' );
+		}else{
+			oLink = A({'href':'javascript:void(0);', 'style':'font-weight:bold;', 'onclick':'fck_link_attach_by_id('+row.id+')'}, 'Click to Link To Source File' );
+		}
+		return TR(null, 
+				TD(null, IMG({'src':row.avatar})), 
+				TD(null, row.file_name, BR(), oLink )); 
 	}	
 	var Elem = MochiKit.DOM.DIV(null, DIV((data.length>1?{'style':'height:200px; overflow:auto;'}:{'class':'uploads'}), TABLE({'class':'data'}, TBODY(null, map(row_display, data)))) );
 	MochiKit.DOM.replaceChildNodes(fck_attachment_target, Elem);
@@ -108,6 +116,18 @@ function process_pagination_data( data ){
 }
 
 function fck_attach_by_id( id ){
+	obj = fck_get_attach_by_id( id );	
+	FCKAttachment.AddAttachment( obj, fck_attachment_size );
+	parent.Cancel();
+}
+
+function fck_link_attach_by_id( id ){
+	obj = fck_get_attach_by_id( id );
+	FCKAttachment.AddAttachmentLink( obj );
+	parent.Cancel();
+}
+
+function fck_get_attach_by_id( id ){
 	var obj;
 	for (n in fck_attachment_data){
 		if ( fck_attachment_data[n].id == id ){
@@ -115,7 +135,5 @@ function fck_attach_by_id( id ){
 			break;
 		}
 	}
-	
-	FCKAttachment.AddAttachment( obj, fck_attachment_size );
-	parent.Cancel();
+	return obj;
 }

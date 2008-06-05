@@ -360,6 +360,17 @@ FCKAttachment.prototype.AddImgByURL = function( url, alt, w, h ){
 	}
 }
 
+
+// Add a new attachment at the actual selection.
+FCKAttachment.prototype.AddAttachmentLink = function( obj )
+{
+	var oLink = FCK.CreateElement( 'A' ) ;
+	oLink.href = obj.url;
+	oLink.innerHTML = obj.file_name;
+}
+
+
+
 Attachment = new FCKAttachment();
 
 FCK.Events.AttachEvent( 'OnAfterSetHTML', MochiKit.Base.bind( Attachment.Redraw, Attachment) ) ;
