@@ -82,6 +82,9 @@ if( isset( $gContent ) ){
 }
 
 if ( !is_null( $error ) ){
+	if ( is_array( $error ) ){
+		$error = implode("\n", $error);
+	} 
 	$gBitSmarty->assign('errors', $error);
 }else{
 	// @Todo is this stuff necessary?

@@ -2,7 +2,7 @@
 <head>
 <script type="text/javascript">
 {if !empty($errors)}
-	alert("Erasdror with upload: {$errors}");
+	alert("Error with upload: {$errors}");
 {else} 
 	function getRslt(){ldelim}	
 		var rslt = {ldelim}
