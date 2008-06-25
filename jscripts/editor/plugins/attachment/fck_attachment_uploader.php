@@ -99,6 +99,5 @@ $gBitSmarty->assign( 'gContent', $gContent );
 $gBitSmarty->assign( 'libertyUploader', TRUE );
 $gBitSmarty->assign( 'uploadTab', TRUE );
 
-// echo $gBitSystem->display( 'bitpackage:liberty/attachment_uploader.tpl', NULL, 'none' , array( 'display_mode' => 'display' ));
 echo $gBitSmarty->fetch( FCKEDITOR_PKG_PATH.'jscripts/editor/plugins/attachment/fck_attachment_uploader.tpl' );
 ?>
