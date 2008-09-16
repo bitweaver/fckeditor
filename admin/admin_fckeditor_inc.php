@@ -3,7 +3,7 @@
 $formFckeditorFeatures = array(
 	"fckeditor_custom_config" => array(
 		'label' => 'Custom Config File',
-		'note' => 'Use a custom configuration file located at: ' . FCKEDITOR_PKG_PATH . 'fckconfig.custom.js. You can copy the jscripts/fckconfig.js or the fckconfig.bitweaver.js and modify to your needs.'
+		'note' => 'If enabled, a custom configuration is included, either <kbd>' . THEMES_PKG_DIR . '/styles/&lt;current-style&gt;/fckeditor/fckconfig.custom.js</kbd>, or <kbd>' . FCKEDITOR_PKG_DIR . '/fckconfig.custom.js</kbd>. It may be a modified copy of <kbd>jscripts/fckconfig.js</kbd> or of <kbd>fckconfig.bitweaver.js</kbd>. Depending on the modifications, a few of the settings below might not work anymore as expected (e.g., toolbar or skin settings).'
 	),
 	"fckeditor_debug" => array(
 		'label' => 'Enabled debugging',
@@ -26,7 +26,7 @@ $gBitSmarty->assign( 'formFckeditorFeatures', $formFckeditorFeatures );
 
 $formToolbars = array( 'fckedit_toolbars' => array(
 		'label' => 'Toolbar Set',
-		'note' => 'The toolbar set to use. "All" includes functionality not supported by BitWeaver. Use at your own risk!'
+		'note' => 'The toolbar set to use. "All" includes functionality not supported by Biteeaver. Use at your own risk!'
 		)
 );
 
