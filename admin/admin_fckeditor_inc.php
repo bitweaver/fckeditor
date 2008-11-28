@@ -26,7 +26,7 @@ $gBitSmarty->assign( 'formFckeditorFeatures', $formFckeditorFeatures );
 
 $formToolbars = array( 'fckedit_toolbars' => array(
 		'label' => 'Toolbar Set',
-		'note' => 'The toolbar set to use. "All" includes functionality not supported by Biteeaver. Use at your own risk!'
+		'note' => 'The toolbar set to use. "All" includes functionality not supported by Bitweaver. Use at your own risk!'
 		)
 );
 
