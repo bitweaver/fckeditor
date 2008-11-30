@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.18 2008/09/16 20:02:29 laetzer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.19 2008/11/30 06:45:01 tekimaki_admin Exp $ *}
 {strip}
-{if $gBitUser->hasPermission( 'p_liberty_edit_html_style' )}
+{if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
 	{if $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
 			
