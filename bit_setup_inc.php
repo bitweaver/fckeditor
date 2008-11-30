@@ -11,7 +11,7 @@ $gBitSystem->registerPackage( $registerHash );
 // Add our plugin directory.
 $gBitSmarty->plugins_dir[] = $registerHash['package_path']."smarty";
 
-if( $gBitSystem->isPackageActive( 'fckeditor' ) && $gBitUser->hasPermission( 'p_liberty_edit_html_style' ) ){
+if( $gBitSystem->isPackageActive( 'fckeditor' ) && $gBitUser->hasPermission( 'p_liberty_enter_html' ) ){
 	$gBitThemes->loadJavascript( FCKEDITOR_PKG_PATH.'jscripts/fckeditor.js' );
 }
 
