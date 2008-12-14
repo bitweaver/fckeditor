@@ -1,11 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.19 2008/11/30 06:45:01 tekimaki_admin Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.20 2008/12/14 04:42:22 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
 	{if $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
-			
-			function FCKify(textarea) {ldelim}
-				var oFCKeditor = new FCKeditor( textarea.name );
+			BitFCK = {ldelim}{rdelim};
+
+			BitFCK.FCKify = function (name) {ldelim}
+				var oFCKeditor = new FCKeditor( name );
 				{* TODO: Hook things from admin panel in here. *}
 				oFCKeditor.BasePath = "{$smarty.const.FCKEDITOR_PKG_URL}jscripts/";
 				
@@ -32,53 +33,64 @@
 					oFCKeditor.Config['Debug'] = 1;
 				{/if}
 				oFCKeditor.ReplaceTextarea() ;
-				if (!document.FCKeditors) {ldelim}
-					document.FCKeditors = new Array();
-				{rdelim}
-				document.FCKeditors[textarea.id] = textarea.name;
-			{rdelim}
+			{rdelim};
 			
-			function FCKprompt(textarea) {ldelim}
+			BitFCK.FCKprompt = function (textarea) {ldelim}
 				if (!textarea.promptedFCK) {ldelim}
 					textarea.useFCK=confirm("{tr}Would you like to use the WYSIWYG editor for this text area?{/tr}");
 					textarea.promptedFCK=1;
 				{rdelim}
 				if (textarea.useFCK) {ldelim}
-					FCKify(textarea);
+					BitFCK.FCKify(textarea.name);
 				{rdelim}
-			{rdelim}
+			{rdelim};
 			
-			function FCKall() {ldelim}
+			BitFCK.FCKall = function () {ldelim}
 				var allTextAreas = document.getElementsByTagName("textarea");
 				for (var i=0; i < allTextAreas.length; i++) {ldelim}
 					if (allTextAreas[i].className.substr(0,7) == 'wysiwyg') {ldelim}
 						{if $gBitSystem->isFeatureActive("fckeditor_ask") ||
 						    $gBitSystem->isFeatureActive("fckeditor_on_click")}
-							allTextAreas[i].onclick = function() {ldelim} FCKprompt(this); {rdelim};
+							allTextAreas[i].onclick = function() {ldelim} BitFCK.FCKprompt(this); {rdelim};
 							{if !$gBitSystem->isFeatureActive("fckeditor_ask")}
 								allTextAreas[i].promptedFCK=1;
 								allTextAreas[i].useFCK=1;
 							{/if}
 						{else}
-							FCKify(allTextAreas[i]);
+							BitFCK.FCKify(allTextAreas[i].name);
 						{/if}
 					{rdelim}
 				{rdelim}
+			{rdelim};
+
+			/* services */
+			BitFCK.prepRequest = function(formid) {ldelim}
+				var fck = FCKeditorAPI.GetInstance( 'comment_data' );
+				if( fck ){ldelim}
+					fck.UpdateLinkedField();
+				{rdelim}	
+			{rdelim};
+
+			if ( typeof(LibertyComment) != 'undefined' ) {ldelim}
+				if( typeof(LibertyComment.prepRequestSrvc) != 'undefined' ) {ldelim}
+					LibertyComment.prepRequestSrvc.push( BitFCK.prepRequest );
+				{rdelim}
 			{rdelim}
-			
+
+			/* init */
 			if ( typeof window.addEventListener != "undefined" ) {ldelim}
-				window.addEventListener( "load", FCKall, false );
+				window.addEventListener( "load", BitFCK.FCKall, false );
 			{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
-				window.attachEvent( "onload", FCKall );
+				window.attachEvent( "onload", BitFCK.FCKall );
 			{rdelim} else {ldelim}
 				if ( window.onload != null ) {ldelim}
 					var oldOnload = window.onload;
 					window.onload = function ( e ) {ldelim}
 						oldOnload( e );
-						FCKall();
+						BitFCK.FCKall();
 					{rdelim};
 				{rdelim} else {ldelim}
-					window.onload = FCKall;
+					window.onload = BitFCK.FCKall;
 				{rdelim}
 			{rdelim}
 		/*]]>*/</script>
