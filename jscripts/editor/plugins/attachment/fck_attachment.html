@@ -58,11 +58,14 @@
 				// Show the "Ok" button.
 				window.parent.SetOkButton( true ) ;	
 
-				// Cherry pick the content id and content guid type from the content editing form 
+				// Cherry pick the content id title  and content guid type from the content editing form 
 				forms =  window.parent.parent.document.forms;
 				for( n=0; n<forms.length; n++ ){
 					if ( !MochiKit.Base.isUndefinedOrNull( forms[n].content_id ) ){
 						document.uploadform.content_id.value = forms[n].content_id.value;
+						if ( !MochiKit.Base.isUndefinedOrNull( forms[n].title ) ){
+							document.uploadform.content_id.value = forms[n].title.value;
+						}
 						break;
 					}
 				}
@@ -101,6 +104,7 @@
 						<div class="formlabel">Upload File</div>
 						<div class="forminput">
 							<input type="file" name="upload" size="40" id="upload" onchange="liberty_uploader(this, 'fck_attachment_uploader.php','Please wait for the current upload to finish.', 'liberty_upload_frame', 'liberty_upload_action');" />
+							<input type="hidden" name="title" value="" />
 							<input type="hidden" name="content_id" value="" />
 							<input type="hidden" name="content_type_guid" value="" />
 							<input type="hidden" name="liberty_upload_action" value="" id="liberty_upload_action" />	
