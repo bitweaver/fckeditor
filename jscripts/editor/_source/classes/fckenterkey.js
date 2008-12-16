@@ -504,10 +504,8 @@ FCKEnterKey.prototype._ExecuteEnterBlock = function( blockTag, range )
 			oRange.MoveToElementEditStart( bIsStartOfBlock && !bIsEndOfBlock ? eNextBlock : eNewBlock ) ;
 		}
 
-		if ( FCKBrowserInfo.IsSafari )
+		if ( FCKBrowserInfo.IsGeckoLike )
 			FCKDomTools.ScrollIntoView( eNextBlock || eNewBlock, false ) ;
-		else if ( FCKBrowserInfo.IsGeckoLike )
-			( eNextBlock || eNewBlock ).scrollIntoView( false ) ;
 
 		oRange.Select() ;
 	}
