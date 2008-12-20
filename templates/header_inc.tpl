@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.20 2008/12/14 04:42:22 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.21 2008/12/20 22:00:32 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
 	{if $gBitSystem->isPackageActive('fckeditor')}
@@ -57,7 +57,13 @@
 								allTextAreas[i].useFCK=1;
 							{/if}
 						{else}
-							BitFCK.FCKify(allTextAreas[i].name);
+							var id;
+							if (typeof(allTextAreas[i].id) != 'undefined' && allTextAreas[i].id != null){ldelim}
+								id = allTextAreas[i].id;
+							{rdelim}else{ldelim}
+								id = allTextAreas[i].name;
+							{rdelim}
+							BitFCK.FCKify(id);
 						{/if}
 					{rdelim}
 				{rdelim}
