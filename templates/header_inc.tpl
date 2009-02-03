@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.22 2009/01/23 18:17:23 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.23 2009/02/03 21:44:31 tekimaki_admin Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
 	{if $gBitSystem->isPackageActive('fckeditor')}
@@ -72,7 +72,7 @@
 			/* services */
 			BitFCK.prepRequest = function(formid) {ldelim}
 				if( typeof( FCKeditorAPI ) != 'undefined' ){ldelim}
-					var fck = FCKeditorAPI.GetInstance( 'comment_data' );
+					var fck = FCKeditorAPI.GetInstance( 'commentpost' );
 					if( fck ){ldelim}
 						fck.UpdateLinkedField();
 					{rdelim}	
