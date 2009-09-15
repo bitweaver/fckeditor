@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.23 2009/02/03 21:44:31 tekimaki_admin Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.24 2009/09/15 14:01:37 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
 	{if $gBitSystem->isPackageActive('fckeditor')}
@@ -37,7 +37,7 @@
 			
 			BitFCK.FCKprompt = function (textarea) {ldelim}
 				if (!textarea.promptedFCK) {ldelim}
-					textarea.useFCK=confirm("{tr}Would you like to use the WYSIWYG editor for this text area?{/tr}");
+					textarea.useFCK=confirm("{tr}Would you like to use the HTML WYSIWYG editor for this text area?{/tr}");
 					textarea.promptedFCK=1;
 				{rdelim}
 				if (textarea.useFCK) {ldelim}
