@@ -1,9 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.30 2009/10/08 19:40:55 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.31 2009/10/08 19:59:29 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && ( $gContent || $gComment ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 {if $post_comment_request && $gComment}
 	{assign var=contentObject value=$gComment}
-	{$contentObject->isValid()} {$contentObject->mInfo.format_guid} 
 {else}
 	{assign var=contentObject value=$gContent}
 {/if}
