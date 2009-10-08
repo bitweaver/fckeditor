@@ -1,5 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.28 2009/10/08 15:27:11 wjames5 Exp $ *}
-{strip}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.29 2009/10/08 15:31:08 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gContent && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
