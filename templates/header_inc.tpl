@@ -1,4 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.27 2009/10/08 15:26:36 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.28 2009/10/08 15:27:11 wjames5 Exp $ *}
+{strip}
+{strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gContent && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
 			BitFCK = {ldelim}{rdelim};
@@ -154,5 +156,4 @@
 			{/if}
 		/*]]>*/</script>
 {/if}
-{strip}
 {/strip}
