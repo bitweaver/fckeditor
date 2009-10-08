@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.26 2009/10/08 01:04:33 wjames5 Exp $ *}
-{strip}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.27 2009/10/08 15:26:36 wjames5 Exp $ *}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gContent && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
 			BitFCK = {ldelim}{rdelim};
+			BitFCK.instances = [];
 
 			BitFCK.FCKify = function (name) {ldelim}
 				var oFCKeditor = new FCKeditor( name );
@@ -31,7 +31,29 @@
 				{if $gBitSystem->isFeatureActive('fckedit_debug')}
 					oFCKeditor.Config['Debug'] = 1;
 				{/if}
-				oFCKeditor.ReplaceTextarea() ;
+				oFCKeditor.ReplaceTextarea();
+				BitFCK.instances.push(oFCKeditor);
+			{rdelim};
+
+			BitFCK.unFCKifyAll = function (name){ldelim} 
+				var n = BitFCK.instances.length - 1;  
+				while( n > -1 ){ldelim}
+					var fck = BitFCK.instances.pop();
+					var api = FCKeditorAPI.GetInstance( fck.InstanceName );
+					{* copy text to original textarea *}
+					api.UpdateLinkedField();
+					{* remove editor *}
+					a = document.getElementById( fck.InstanceName + '___Config' );
+					b = document.getElementById( fck.InstanceName + '___Frame' );
+					a.parentNode.removeChild( a );
+					b.parentNode.removeChild( b );
+					{* display original textarea *}
+					BitBase.setElementDisplay( api.LinkedField, 'block' );
+					{* destroy the instance *}
+					delete api;
+					delete fck;
+					n--;
+				{rdelim}
 			{rdelim};
 			
 			BitFCK.FCKprompt = function (textarea) {ldelim}
@@ -73,9 +95,7 @@
 				for( n in radios ){ldelim}
 					var el = radios[n];
 					if( el.type == 'radio' ){ldelim}
-						if( el.value == 'bithtml' ){ldelim}
-							el.onclick = BitFCK.FCKall;
-						{rdelim}
+						el.onclick = el.value == 'bithtml'?BitFCK.FCKall:BitFCK.unFCKifyAll;
 					{rdelim}
 				{rdelim}
 			{rdelim};
@@ -134,4 +154,5 @@
 			{/if}
 		/*]]>*/</script>
 {/if}
+{strip}
 {/strip}
