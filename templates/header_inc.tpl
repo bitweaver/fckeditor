@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.25 2009/10/08 00:38:56 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.26 2009/10/08 01:04:33 wjames5 Exp $ *}
 {strip}
-{if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
+{if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gContent && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
 			BitFCK = {ldelim}{rdelim};
 
@@ -68,6 +68,18 @@
 				{rdelim}
 			{rdelim};
 
+			BitFCK.bindFormatListener = function() {ldelim}
+				var radios = document.getElementsByName( 'format_guid' );
+				for( n in radios ){ldelim}
+					var el = radios[n];
+					if( el.type == 'radio' ){ldelim}
+						if( el.value == 'bithtml' ){ldelim}
+							el.onclick = BitFCK.FCKall;
+						{rdelim}
+					{rdelim}
+				{rdelim}
+			{rdelim};
+
 			/* services */
 			BitFCK.prepRequest = function(formid) {ldelim}
 				if( typeof( FCKeditorAPI ) != 'undefined' ){ldelim}
@@ -85,6 +97,7 @@
 			{rdelim}
 
 			/* init */
+			{* this is mess - BitBase has utility for binding onload events, look into it soon *}
 			{if ( $gContent->isValid() && $gContent->mInfo.format_guid eq 'bithtml' ) || 
 				(!$gContent->isValid() && $gBitSystem->getConfig( 'default_format' ) eq 'bithtml') }
 				if ( typeof window.addEventListener != "undefined" ) {ldelim}
@@ -100,6 +113,22 @@
 						{rdelim};
 					{rdelim} else {ldelim}
 						window.onload = BitFCK.FCKall;
+					{rdelim}
+				{rdelim}
+			{else}
+				if ( typeof window.addEventListener != "undefined" ) {ldelim}
+					window.addEventListener( "load", BitFCK.bindFormatListener, false );
+				{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
+					window.attachEvent( "onload", BitFCK.bindFormatListener );
+				{rdelim} else {ldelim}
+					if ( window.onload != null ) {ldelim}
+						var oldOnload = window.onload;
+						window.onload = function ( e ) {ldelim}
+							oldOnload( e );
+							BitFCK.bindFormatListener();
+						{rdelim};
+					{rdelim} else {ldelim}
+						window.onload = BitFCK.bindFormatListener;
 					{rdelim}
 				{rdelim}
 			{/if}
