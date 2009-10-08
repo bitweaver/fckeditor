@@ -1,6 +1,12 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.29 2009/10/08 15:31:08 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.30 2009/10/08 19:40:55 wjames5 Exp $ *}
 {strip}
-{if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gContent && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
+{if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && ( $gContent || $gComment ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
+{if $post_comment_request && $gComment}
+	{assign var=contentObject value=$gComment}
+	{$contentObject->isValid()} {$contentObject->mInfo.format_guid} 
+{else}
+	{assign var=contentObject value=$gContent}
+{/if}
 		<script type="text/javascript">/*<![CDATA[*/
 			BitFCK = {ldelim}{rdelim};
 			BitFCK.instances = [];
@@ -89,6 +95,7 @@
 						{/if}
 					{rdelim}
 				{rdelim}
+				BitFCK.bindFormatListener();
 			{rdelim};
 
 			BitFCK.bindFormatListener = function() {ldelim}
@@ -118,40 +125,12 @@
 			{rdelim}
 
 			/* init */
-			{* this is mess - BitBase has utility for binding onload events, look into it soon *}
-			{if ( $gContent->isValid() && $gContent->mInfo.format_guid eq 'bithtml' ) || 
-				(!$gContent->isValid() && $gBitSystem->getConfig( 'default_format' ) eq 'bithtml') }
-				if ( typeof window.addEventListener != "undefined" ) {ldelim}
-					window.addEventListener( "load", BitFCK.FCKall, false );
-				{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
-					window.attachEvent( "onload", BitFCK.FCKall );
-				{rdelim} else {ldelim}
-					if ( window.onload != null ) {ldelim}
-						var oldOnload = window.onload;
-						window.onload = function ( e ) {ldelim}
-							oldOnload( e );
-							BitFCK.FCKall();
-						{rdelim};
-					{rdelim} else {ldelim}
-						window.onload = BitFCK.FCKall;
-					{rdelim}
-				{rdelim}
+			{if ( $contentObject->isValid() && $contentObject->mInfo.format_guid eq 'bithtml' ) || 
+				(!$contentObject->isValid() && $gBitSystem->getConfig( 'default_format' ) eq 'bithtml')
+				}
+				BitBase.addLoadHook( BitFCK.FCKall );
 			{else}
-				if ( typeof window.addEventListener != "undefined" ) {ldelim}
-					window.addEventListener( "load", BitFCK.bindFormatListener, false );
-				{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
-					window.attachEvent( "onload", BitFCK.bindFormatListener );
-				{rdelim} else {ldelim}
-					if ( window.onload != null ) {ldelim}
-						var oldOnload = window.onload;
-						window.onload = function ( e ) {ldelim}
-							oldOnload( e );
-							BitFCK.bindFormatListener();
-						{rdelim};
-					{rdelim} else {ldelim}
-						window.onload = BitFCK.bindFormatListener;
-					{rdelim}
-				{rdelim}
+				BitBase.addLoadHook( BitFCK.bindFormatListener );
 			{/if}
 		/*]]>*/</script>
 {/if}
