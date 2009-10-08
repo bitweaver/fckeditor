@@ -1,7 +1,7 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.31 2009/10/08 19:59:29 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.32 2009/10/08 20:59:24 wjames5 Exp $ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && ( $gContent || $gComment ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
-{if $post_comment_request && $gComment}
+{if ( $post_comment_request || $post_comment_preview || $comments_ajax ) && $gComment}
 	{assign var=contentObject value=$gComment}
 {else}
 	{assign var=contentObject value=$gContent}
