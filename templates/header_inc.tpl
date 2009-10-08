@@ -1,7 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.24 2009/09/15 14:01:37 wjames5 Exp $ *}
+{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.25 2009/10/08 00:38:56 wjames5 Exp $ *}
 {strip}
-{if $gBitUser->hasPermission( 'p_liberty_enter_html' )}
-	{if $gBitSystem->isPackageActive('fckeditor')}
+{if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 		<script type="text/javascript">/*<![CDATA[*/
 			BitFCK = {ldelim}{rdelim};
 
@@ -86,22 +85,24 @@
 			{rdelim}
 
 			/* init */
-			if ( typeof window.addEventListener != "undefined" ) {ldelim}
-				window.addEventListener( "load", BitFCK.FCKall, false );
-			{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
-				window.attachEvent( "onload", BitFCK.FCKall );
-			{rdelim} else {ldelim}
-				if ( window.onload != null ) {ldelim}
-					var oldOnload = window.onload;
-					window.onload = function ( e ) {ldelim}
-						oldOnload( e );
-						BitFCK.FCKall();
-					{rdelim};
+			{if ( $gContent->isValid() && $gContent->mInfo.format_guid eq 'bithtml' ) || 
+				(!$gContent->isValid() && $gBitSystem->getConfig( 'default_format' ) eq 'bithtml') }
+				if ( typeof window.addEventListener != "undefined" ) {ldelim}
+					window.addEventListener( "load", BitFCK.FCKall, false );
+				{rdelim} else if ( typeof window.attachEvent != "undefined" ) {ldelim}
+					window.attachEvent( "onload", BitFCK.FCKall );
 				{rdelim} else {ldelim}
-					window.onload = BitFCK.FCKall;
+					if ( window.onload != null ) {ldelim}
+						var oldOnload = window.onload;
+						window.onload = function ( e ) {ldelim}
+							oldOnload( e );
+							BitFCK.FCKall();
+						{rdelim};
+					{rdelim} else {ldelim}
+						window.onload = BitFCK.FCKall;
+					{rdelim}
 				{rdelim}
-			{rdelim}
+			{/if}
 		/*]]>*/</script>
-	{/if}
 {/if}
 {/strip}
