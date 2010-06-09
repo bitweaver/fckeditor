@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_fckeditor/templates/header_inc.tpl,v 1.32 2009/10/08 20:59:24 wjames5 Exp $ *}
+{* $Header$ *}
 {strip}
 {if $gBitUser->hasPermission( 'p_liberty_enter_html' ) && ( $gContent || $gComment ) && $gLibertySystem->mPlugins.bithtml && $gBitSystem->isPackageActive('fckeditor')}
 {if ( $post_comment_request || $post_comment_preview || $comments_ajax ) && $gComment}
