@@ -3,7 +3,7 @@
 $formFckeditorFeatures = array(
 	"fckeditor_custom_config" => array(
 		'label' => 'Custom Config File',
-		'note' => 'If enabled, a custom configuration is included, either <kbd>' . THEMES_PKG_DIR . '/styles/&lt;current-style&gt;/fckeditor/fckconfig.custom.js</kbd>, or <kbd>' . FCKEDITOR_PKG_DIR . '/fckconfig.custom.js</kbd>. It may be a modified copy of <kbd>jscripts/fckconfig.js</kbd> or of <kbd>fckconfig.bitweaver.js</kbd>. Depending on the modifications, a few of the settings below might not work anymore as expected (e.g., toolbar or skin settings).'
+		'note' => 'If enabled, a custom configuration is included, either <kbd>' . CONFIG_PKG_DIR . '/themes/&lt;current-style&gt;/fckeditor/fckconfig.custom.js</kbd>, or <kbd>' . FCKEDITOR_PKG_DIR . '/fckconfig.custom.js</kbd>. It may be a modified copy of <kbd>jscripts/fckconfig.js</kbd> or of <kbd>fckconfig.bitweaver.js</kbd>. Depending on the modifications, a few of the settings below might not work anymore as expected (e.g., toolbar or skin settings).'
 	),
 	"fckeditor_debug" => array(
 		'label' => 'Enabled debugging',
